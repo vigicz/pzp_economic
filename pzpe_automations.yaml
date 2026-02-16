@@ -1,0 +1,185 @@
+# =============================================================================
+# PZP/Kermi tepelné čerpadlo — Automatizace
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# WR50005 — obousměrná synchronizace bitového registru
+# -----------------------------------------------------------------------------
+
+- id: pzpe_wr50005_zapis
+  alias: PZPE, zápis do registru WR50005
+  description: Při změně jakéhokoli WR50005 bitu zapíše novou dekadickou hodnotu do TČ
+  triggers:
+  - platform: state
+    entity_id:
+    - input_boolean.pzpe_ib_wr50005_bit0_rezim_tc
+    - input_boolean.pzpe_ib_wr50005_bit1_obecny_pozadavek
+    - input_boolean.pzpe_ib_wr50005_bit2_regbod_topeni
+    - input_boolean.pzpe_ib_wr50005_bit3_hystereze_topeni
+    - input_boolean.pzpe_ib_wr50005_bit4_regbod_chlazeni
+    - input_boolean.pzpe_ib_wr50005_bit5_hystereze_chlazeni
+    - input_boolean.pzpe_ib_wr50005_bit6_sezona
+    - input_boolean.pzpe_ib_wr50005_bit7_hdo
+    - input_boolean.pzpe_ib_wr50005_bit8_provozni_rezim
+  conditions:
+  - condition: template
+    value_template: >
+      {{ states('sensor.pzpe_tpl_wr50005_hodnota')|int(0)
+         != states('sensor.pzpe_hreg_rw_wr50005')|int(0) }}
+  actions:
+  - service: modbus.write_register
+    data:
+      hub: pzpe
+      address: 50005
+      slave: 1
+      value: '{{ states(''sensor.pzpe_tpl_wr50005_hodnota'')|int }}'
+  mode: single
+
+- id: pzpe_wr50005_sync
+  alias: PZPE, sync WR50005 z TČ do input_boolean
+  description: Při změně sensoru WR50005 nastaví jednotlivé input_boolean dle bitů
+  triggers:
+  - platform: state
+    entity_id: sensor.pzpe_hreg_rw_wr50005
+  - platform: homeassistant
+    event: start
+  conditions:
+  - condition: template
+    value_template: >
+      {{ states('sensor.pzpe_hreg_rw_wr50005') not in ['unknown', 'unavailable'] }}
+  actions:
+  - variables:
+      val: "{{ states('sensor.pzpe_hreg_rw_wr50005') | int(0) }}"
+  # bit 0
+  - action: >
+      {{ 'input_boolean.turn_on' if (val | int | bitwise_and(1)) > 0 else 'input_boolean.turn_off' }}
+    target:
+      entity_id: input_boolean.pzpe_ib_wr50005_bit0_rezim_tc
+  # bit 1
+  - action: >
+      {{ 'input_boolean.turn_on' if (val | int | bitwise_and(2)) > 0 else 'input_boolean.turn_off' }}
+    target:
+      entity_id: input_boolean.pzpe_ib_wr50005_bit1_obecny_pozadavek
+  # bit 2
+  - action: >
+      {{ 'input_boolean.turn_on' if (val | int | bitwise_and(4)) > 0 else 'input_boolean.turn_off' }}
+    target:
+      entity_id: input_boolean.pzpe_ib_wr50005_bit2_regbod_topeni
+  # bit 3
+  - action: >
+      {{ 'input_boolean.turn_on' if (val | int | bitwise_and(8)) > 0 else 'input_boolean.turn_off' }}
+    target:
+      entity_id: input_boolean.pzpe_ib_wr50005_bit3_hystereze_topeni
+  # bit 4
+  - action: >
+      {{ 'input_boolean.turn_on' if (val | int | bitwise_and(16)) > 0 else 'input_boolean.turn_off' }}
+    target:
+      entity_id: input_boolean.pzpe_ib_wr50005_bit4_regbod_chlazeni
+  # bit 5
+  - action: >
+      {{ 'input_boolean.turn_on' if (val | int | bitwise_and(32)) > 0 else 'input_boolean.turn_off' }}
+    target:
+      entity_id: input_boolean.pzpe_ib_wr50005_bit5_hystereze_chlazeni
+  # bit 6
+  - action: >
+      {{ 'input_boolean.turn_on' if (val | int | bitwise_and(64)) > 0 else 'input_boolean.turn_off' }}
+    target:
+      entity_id: input_boolean.pzpe_ib_wr50005_bit6_sezona
+  # bit 7
+  - action: >
+      {{ 'input_boolean.turn_on' if (val | int | bitwise_and(128)) > 0 else 'input_boolean.turn_off' }}
+    target:
+      entity_id: input_boolean.pzpe_ib_wr50005_bit7_hdo
+  # bit 8
+  - action: >
+      {{ 'input_boolean.turn_on' if (val | int | bitwise_and(256)) > 0 else 'input_boolean.turn_off' }}
+    target:
+      entity_id: input_boolean.pzpe_ib_wr50005_bit8_provozni_rezim
+  mode: single
+
+# -----------------------------------------------------------------------------
+# WR50015 — obousměrná synchronizace bitového registru (teplá voda)
+# -----------------------------------------------------------------------------
+
+- id: pzpe_wr50015_zapis
+  alias: PZPE, zápis do registru WR50015
+  description: Při změně jakéhokoli WR50015 bitu zapíše novou dekadickou hodnotu do TČ
+  triggers:
+  - platform: state
+    entity_id:
+    - input_boolean.pzpe_ib_wr50015_bit0_regbod_tv
+    - input_boolean.pzpe_ib_wr50015_bit1_hystereze_tv
+    - input_boolean.pzpe_ib_wr50015_bit2_blokovani_pripravy_tv
+    - input_boolean.pzpe_ib_wr50015_bit3_blokovani_dohrevu_tv
+  conditions:
+  - condition: template
+    value_template: >
+      {{ states('sensor.pzpe_tpl_wr50015_hodnota')|int(0)
+         != states('sensor.pzpe_hreg_rw_wr50015')|int(0) }}
+  actions:
+  - service: modbus.write_register
+    data:
+      hub: pzpe
+      address: 50015
+      slave: 1
+      value: '{{ states(''sensor.pzpe_tpl_wr50015_hodnota'')|int }}'
+  mode: single
+
+- id: pzpe_wr50015_sync
+  alias: PZPE, sync WR50015 z TČ do input_boolean
+  description: Při změně sensoru WR50015 nastaví jednotlivé input_boolean dle bitů
+  triggers:
+  - platform: state
+    entity_id: sensor.pzpe_hreg_rw_wr50015
+  - platform: homeassistant
+    event: start
+  conditions:
+  - condition: template
+    value_template: >
+      {{ states('sensor.pzpe_hreg_rw_wr50015') not in ['unknown', 'unavailable'] }}
+  actions:
+  - variables:
+      val: "{{ states('sensor.pzpe_hreg_rw_wr50015') | int(0) }}"
+  # bit 0
+  - action: >
+      {{ 'input_boolean.turn_on' if (val | int | bitwise_and(1)) > 0 else 'input_boolean.turn_off' }}
+    target:
+      entity_id: input_boolean.pzpe_ib_wr50015_bit0_regbod_tv
+  # bit 1
+  - action: >
+      {{ 'input_boolean.turn_on' if (val | int | bitwise_and(2)) > 0 else 'input_boolean.turn_off' }}
+    target:
+      entity_id: input_boolean.pzpe_ib_wr50015_bit1_hystereze_tv
+  # bit 2
+  - action: >
+      {{ 'input_boolean.turn_on' if (val | int | bitwise_and(4)) > 0 else 'input_boolean.turn_off' }}
+    target:
+      entity_id: input_boolean.pzpe_ib_wr50015_bit2_blokovani_pripravy_tv
+  # bit 3
+  - action: >
+      {{ 'input_boolean.turn_on' if (val | int | bitwise_and(8)) > 0 else 'input_boolean.turn_off' }}
+    target:
+      entity_id: input_boolean.pzpe_ib_wr50015_bit3_blokovani_dohrevu_tv
+  mode: single
+
+# -----------------------------------------------------------------------------
+# Ohlášení nadřazeného řízení — nutné pro fungování externího řízení TČ
+# -----------------------------------------------------------------------------
+
+- id: pzpe_ohlaseni_nadrazeneho_rizeni
+  alias: PZPE, ohlášení nadřazeného řízení (každou minutu)
+  description: >
+    Přepíná coil WC50001 každou minutu přímým zápisem přes Modbus.
+    TČ tak ví, že nadřazený systém je aktivní (watchdog).
+  triggers:
+  - trigger: time_pattern
+    minutes: /1
+  actions:
+  - action: modbus.write_coil
+    data:
+      hub: pzpe
+      slave: 1
+      address: 50001
+      state: >
+        {{ not is_state('binary_sensor.pzpe_coil_rw_wc50001_ohlaseni', 'on') }}
+  mode: single

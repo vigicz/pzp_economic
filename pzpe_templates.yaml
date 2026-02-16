@@ -1,0 +1,29 @@
+# =============================================================================
+# PZP/Kermi tepelné čerpadlo — Template sensory
+# =============================================================================
+
+sensor:
+  # pzpe_tpl_wr50005_hodnota — Dekadická hodnota pro zápis do WR50005
+  # Součet 2^N za každý zapnutý input_boolean (bit 0–8)
+  - name: pzpe_tpl_wr50005_hodnota
+    unique_id: pzpe_tpl_wr50005_hodnota
+    state: >-
+      {{ (is_state('input_boolean.pzpe_ib_wr50005_bit0_rezim_tc', 'on') | int * 1)
+       + (is_state('input_boolean.pzpe_ib_wr50005_bit1_obecny_pozadavek', 'on') | int * 2)
+       + (is_state('input_boolean.pzpe_ib_wr50005_bit2_regbod_topeni', 'on') | int * 4)
+       + (is_state('input_boolean.pzpe_ib_wr50005_bit3_hystereze_topeni', 'on') | int * 8)
+       + (is_state('input_boolean.pzpe_ib_wr50005_bit4_regbod_chlazeni', 'on') | int * 16)
+       + (is_state('input_boolean.pzpe_ib_wr50005_bit5_hystereze_chlazeni', 'on') | int * 32)
+       + (is_state('input_boolean.pzpe_ib_wr50005_bit6_sezona', 'on') | int * 64)
+       + (is_state('input_boolean.pzpe_ib_wr50005_bit7_hdo', 'on') | int * 128)
+       + (is_state('input_boolean.pzpe_ib_wr50005_bit8_provozni_rezim', 'on') | int * 256) }}
+
+  # pzpe_tpl_wr50015_hodnota — Dekadická hodnota pro zápis do WR50015
+  # Součet 2^N za každý zapnutý input_boolean (bit 0–3)
+  - name: pzpe_tpl_wr50015_hodnota
+    unique_id: pzpe_tpl_wr50015_hodnota
+    state: >-
+      {{ (is_state('input_boolean.pzpe_ib_wr50015_bit0_regbod_tv', 'on') | int * 1)
+       + (is_state('input_boolean.pzpe_ib_wr50015_bit1_hystereze_tv', 'on') | int * 2)
+       + (is_state('input_boolean.pzpe_ib_wr50015_bit2_blokovani_pripravy_tv', 'on') | int * 4)
+       + (is_state('input_boolean.pzpe_ib_wr50015_bit3_blokovani_dohrevu_tv', 'on') | int * 8) }}

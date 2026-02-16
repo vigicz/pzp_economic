@@ -1,0 +1,210 @@
+# =============================================================================
+# PZP/Kermi tepelné čerpadlo — Helpery (input_boolean)
+# =============================================================================
+
+input_boolean:
+
+  # -------------------------------------------------------------------------
+  # WR50005 — bitové povolení nadřazeného řízení (addr 50005)
+  # Každý input_boolean = 1 bit registru. Obousměrná synchronizace
+  # s TČ zajištěna automatizacemi v pzpe_automations.yaml.
+  # -------------------------------------------------------------------------
+
+  # bit 0 (hodnota 1) — Povolení režimu TČ (Topení/Chlazení), coil 50002
+  pzpe_ib_wr50005_bit0_rezim_tc:
+    name: "WR50005 bit0: Režim TČ (Topení/Chlazení)"
+
+  # bit 1 (hodnota 2) — Povolení aktivace obecného požadavku na provoz, coil 50003
+  pzpe_ib_wr50005_bit1_obecny_pozadavek:
+    name: "WR50005 bit1: Obecný požadavek na provoz"
+
+  # bit 2 (hodnota 4) — Povolení nastavení reg. bodu topení, reg. 50100
+  pzpe_ib_wr50005_bit2_regbod_topeni:
+    name: "WR50005 bit2: Reg. bod topení"
+
+  # bit 3 (hodnota 8) — Povolení nastavení hystereze reg. bodu topení, reg. 50101
+  pzpe_ib_wr50005_bit3_hystereze_topeni:
+    name: "WR50005 bit3: Hystereze reg. bodu topení"
+
+  # bit 4 (hodnota 16) — Povolení nastavení reg. bodu chlazení, reg. 50102
+  pzpe_ib_wr50005_bit4_regbod_chlazeni:
+    name: "WR50005 bit4: Reg. bod chlazení"
+
+  # bit 5 (hodnota 32) — Povolení nastavení hystereze reg. bodu chlazení, reg. 50103
+  pzpe_ib_wr50005_bit5_hystereze_chlazeni:
+    name: "WR50005 bit5: Hystereze reg. bodu chlazení"
+
+  # bit 6 (hodnota 64) — Povolení nastavení sezóny (Léto/Zima), reg. 50114
+  pzpe_ib_wr50005_bit6_sezona:
+    name: "WR50005 bit6: Sezóna (Léto/Zima)"
+
+  # bit 7 (hodnota 128) — Povolení řízení HDO, coil 50033
+  pzpe_ib_wr50005_bit7_hdo:
+    name: "WR50005 bit7: Řízení HDO"
+
+  # bit 8 (hodnota 256) — Povolení řízení provozního režimu, reg. 50115
+  pzpe_ib_wr50005_bit8_provozni_rezim:
+    name: "WR50005 bit8: Provozní režim (Sleep/Demo/Auto/Test/Service)"
+
+  # -------------------------------------------------------------------------
+  # WR50015 — bitové povolení řízení teplé vody (addr 50015)
+  # Každý input_boolean = 1 bit registru. Obousměrná synchronizace
+  # s TČ zajištěna automatizacemi v pzpe_automations.yaml.
+  # -------------------------------------------------------------------------
+
+  # bit 0 (hodnota 1) — Povolení nastavení reg. bodu teplé vody, reg. 50108
+  pzpe_ib_wr50015_bit0_regbod_tv:
+    name: "WR50015 bit0: Reg. bod teplé vody"
+
+  # bit 1 (hodnota 2) — Povolení nastavení hystereze reg. bodu teplé vody, reg. 50109
+  pzpe_ib_wr50015_bit1_hystereze_tv:
+    name: "WR50015 bit1: Hystereze reg. bodu teplé vody"
+
+  # bit 2 (hodnota 4) — Povolení funkce blokování přípravy teplé vody, coil 50010
+  pzpe_ib_wr50015_bit2_blokovani_pripravy_tv:
+    name: "WR50015 bit2: Blokování přípravy teplé vody"
+
+  # bit 3 (hodnota 8) — Povolení funkce blokování dohřevu teplé vody, coil 50011
+  pzpe_ib_wr50015_bit3_blokovani_dohrevu_tv:
+    name: "WR50015 bit3: Blokování dohřevu teplé vody"
+
+# =============================================================================
+# Friendly names — české názvy entit (entity_id zůstává beze změny)
+# =============================================================================
+
+homeassistant:
+  customize:
+    # --- Sensors (teploty addr 100–131) ---
+    sensor.pzpe_ireg_ro_b01_teplota_zpatecka:
+      friendly_name: "PZPE B01 Teplota zpátečky do TČ"
+    sensor.pzpe_ireg_ro_b02_teplota_vystup:
+      friendly_name: "PZPE B02 Teplota výstupu z TČ"
+    sensor.pzpe_ireg_ro_b03_teplota_vyparnik:
+      friendly_name: "PZPE B03 Teplota okolí výparníku"
+    sensor.pzpe_ireg_ro_b04_teplota_povrch_vyparnik:
+      friendly_name: "PZPE B04 Teplota povrchu výparníku"
+    sensor.pzpe_ireg_ro_b11_teplota_vratna:
+      friendly_name: "PZPE B11 Teplota vratné vody"
+    sensor.pzpe_ireg_ro_b12_teplota_tv:
+      friendly_name: "PZPE B12 Teplota teplé vody"
+    sensor.pzpe_ireg_ro_b13_teplota_smesovac_01:
+      friendly_name: "PZPE B13 Teplota za směšovačem 01"
+    sensor.pzpe_ireg_ro_b14_teplota_smesovac_02:
+      friendly_name: "PZPE B14 Teplota za směšovačem 02"
+    sensor.pzpe_ireg_ro_b17_teplota_venkovni:
+      friendly_name: "PZPE B17 Venkovní teplota"
+    sensor.pzpe_ireg_ro_brm01_teplota_rm01:
+      friendly_name: "PZPE RM01 Teplota Roommanager 01"
+    sensor.pzpe_ireg_ro_brm02_teplota_rm02:
+      friendly_name: "PZPE RM02 Teplota Roommanager 02"
+    sensor.pzpe_ireg_ro_brm03_teplota_rm03:
+      friendly_name: "PZPE RM03 Teplota Roommanager 03"
+    sensor.pzpe_ireg_ro_brm04_teplota_rm04:
+      friendly_name: "PZPE RM04 Teplota Roommanager 04"
+    sensor.pzpe_ireg_ro_b07_teplota_deskovy_vyparnik:
+      friendly_name: "PZPE B07 Teplota výstupu z deskového výparníku"
+    sensor.pzpe_ireg_ro_b08_teplota_vystup_deskovy:
+      friendly_name: "PZPE B08 Teplota na výstupu z deskového výparníku"
+    sensor.pzpe_ireg_ro_b16_teplota_bazen:
+      friendly_name: "PZPE B16 Teplota bazénové vody"
+    sensor.pzpe_ireg_ro_b10_teplota_zpatecka_chlazeni:
+      friendly_name: "PZPE B10 Teplota zpátečky z chlazení"
+    sensor.pzpe_ireg_ro_b19_teplota_privod_topeni:
+      friendly_name: "PZPE B19 Teplota přívodu do topení"
+    sensor.pzpe_ireg_ro_b18_teplota_tv_info:
+      friendly_name: "PZPE B18 Teplota teplé vody (informativní)"
+    sensor.pzpe_ireg_ro_at1_prumerna_venkovni_sezona:
+      friendly_name: "PZPE AT1 Průměrná venkovní teplota pro sezónu"
+    sensor.pzpe_ireg_ro_at2_prumerna_venkovni_tc:
+      friendly_name: "PZPE AT2 Průměrná venkovní teplota pro řízení TČ"
+    # --- Sensors (addr 132–152) ---
+    sensor.pzpe_ireg_ro_sc004_vykon_kompresor:
+      friendly_name: "PZPE sC004 Dostupný výkon pro kompresor"
+    sensor.pzpe_ireg_ro_sh010_max_prikon:
+      friendly_name: "PZPE sH010 Maximální příkon TČ"
+    sensor.pzpe_ireg_ro_sh111_sezona:
+      friendly_name: "PZPE sH111 Sezóna (0=Zima, 1=Léto)"
+    sensor.pzpe_ireg_ro_sm100_smesovac01_topeni:
+      friendly_name: "PZPE sM100 Směšovač 01, požadavek topení"
+    sensor.pzpe_ireg_ro_sm200_smesovac02_topeni:
+      friendly_name: "PZPE sM200 Směšovač 02, požadavek topení"
+    sensor.pzpe_ireg_ro_so100_pozadavek_tv:
+      friendly_name: "PZPE sO100 Aktuální požadavek teplé vody"
+    sensor.pzpe_ireg_ro_so101_hystereze_tv:
+      friendly_name: "PZPE sO101 Hystereze k požadavku TV"
+    sensor.pzpe_ireg_ro_sq021_funkcni_program_procenta:
+      friendly_name: "PZPE sQ021 Funkční topný program [%]"
+    sensor.pzpe_ireg_ro_sq022_funkcni_program_teplota:
+      friendly_name: "PZPE sQ022 Teplota funkčního topného programu"
+    sensor.pzpe_ireg_ro_sr030_regbod_topeni:
+      friendly_name: "PZPE sR030 Regulační bod topení"
+    sensor.pzpe_ireg_ro_sr070_hystereze_topeni:
+      friendly_name: "PZPE sR070 Hystereze reg. bodu topení"
+    sensor.pzpe_ireg_ro_sr080_predehrev_tv:
+      friendly_name: "PZPE sR080 Požadavek pro předehřev TV"
+    sensor.pzpe_ireg_ro_sr100_aktualni_pozadavek_topeni:
+      friendly_name: "PZPE sR100 Aktuální požadavek topení"
+    sensor.pzpe_ireg_ro_sr110_aktualni_teplota_zpatecka:
+      friendly_name: "PZPE sR110 Aktuální teplota zpátečky z topení"
+    sensor.pzpe_ireg_ro_sm105_smesovac01_chlazeni:
+      friendly_name: "PZPE sM105 Směšovač 01, požadavek chlazení"
+    sensor.pzpe_ireg_ro_sm205_smesovac02_chlazeni:
+      friendly_name: "PZPE sM205 Směšovač 02, požadavek chlazení"
+    sensor.pzpe_ireg_ro_sr300_aktualni_pozadavek_chlazeni:
+      friendly_name: "PZPE sR300 Aktuální požadavek chlazení"
+    sensor.pzpe_ireg_ro_bivalence_topeni:
+      friendly_name: "PZPE Stav bivalence topení"
+    sensor.pzpe_ireg_ro_bivalence_tv:
+      friendly_name: "PZPE Stav bivalence TV"
+    sensor.pzpe_ireg_ro_snocircuits_pocet_okruhu:
+      friendly_name: "PZPE Počet okruhů"
+    sensor.pzpe_ireg_ro_snomix_pocet_smesovac:
+      friendly_name: "PZPE Počet směšovačů"
+    sensor.pzpe_hreg_ro_r040_krivka_topeni:
+      friendly_name: "PZPE R040 Křivka topení"
+    sensor.pzpe_hreg_ro_m140_krivka_smesovac01:
+      friendly_name: "PZPE M140 Křivka topení směšovač 01"
+    sensor.pzpe_hreg_ro_m240_krivka_smesovac02:
+      friendly_name: "PZPE M240 Křivka topení směšovač 02"
+    sensor.pzpe_hreg_ro_stav_tc:
+      friendly_name: "PZPE Stavy tepelného čerpadla"
+    sensor.pzpe_hreg_rw_wr50005:
+      friendly_name: "PZPE WR50005"
+    sensor.pzpe_hreg_rw_wr50015:
+      friendly_name: "PZPE WR50015"
+    sensor.pzpe_hreg_rw_wr50100_regbod_topeni:
+      friendly_name: "PZPE WR50100 Regulační bod topení"
+    sensor.pzpe_hreg_rw_wr50108_regbod_tv:
+      friendly_name: "PZPE WR50108 Regulační bod TV"
+    # --- Template sensors ---
+    sensor.pzpe_tpl_wr50005_hodnota:
+      friendly_name: "PZPE WR50005 dekadická hodnota"
+    sensor.pzpe_tpl_wr50015_hodnota:
+      friendly_name: "PZPE WR50015 dekadická hodnota"
+    # --- Binary sensors ---
+    binary_sensor.pzpe_coil_ro_nadrazene_rizeni_aktivni:
+      friendly_name: "PZPE Nadřazené řízení TČ je aktivní"
+    binary_sensor.pzpe_coil_rw_wc50001_ohlaseni:
+      friendly_name: "PZPE Ohlášení nadřazeného řízení"
+    binary_sensor.pzpe_coil_rw_povolit_ohrev_tv:
+      friendly_name: "PZPE Povolit přípravy TV"
+    binary_sensor.pzpe_coil_rw_pohotovostni_rezim:
+      friendly_name: "PZPE Pohotovostní režim"
+    binary_sensor.pzpe_coil_ro_blokovani_hdo:
+      friendly_name: "PZPE Blokování HDO"
+    binary_sensor.pzpe_coil_ro_dohrev_primotopny:
+      friendly_name: "PZPE Přímotopný dohřev TV"
+    binary_sensor.pzpe_coil_ro_dohrev_neprimotopny:
+      friendly_name: "PZPE Nepřímotopný dohřev TV"
+    # --- Switches ---
+    switch.pzpe_coil_rw_wc50001_ohlaseni_sw:
+      friendly_name: "PZPE Ohlášení nadřazeného řízení"
+    switch.pzpe_coil_rw_povolit_ohrev_tv_sw:
+      friendly_name: "PZPE Povolit přípravy TV"
+    switch.pzpe_coil_rw_pohotovostni_rezim_sw:
+      friendly_name: "PZPE Pohotovostní režim"
+    # --- Climates ---
+    climate.pzpe_climate_rw_regbod_tv:
+      friendly_name: "PZPE Regulační bod teplé vody"
+    climate.pzpe_climate_rw_regbod_topeni:
+      friendly_name: "PZPE Regulační bod topení"

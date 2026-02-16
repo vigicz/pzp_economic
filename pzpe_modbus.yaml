@@ -1,0 +1,656 @@
+# =============================================================================
+# PZP/Kermi tepelné čerpadlo — Modbus konfigurace
+# Hub: pzpe | TCP 192.168.30.101:502
+# =============================================================================
+
+type: tcp
+host: 192.168.30.101
+port: 502
+name: pzpe
+delay: 0
+timeout: 5
+scan_interval: 10
+
+# ---------------------------------------------------------------------------
+# SENSORS (modbus sensor)
+# ---------------------------------------------------------------------------
+sensors:
+
+  # B01.VAL — Teplota zpátečky do TČ (input register 100, FC04)
+  - name: pzpe_ireg_ro_b01_teplota_zpatecka
+    unique_id: pzpe_ireg_ro_b01_teplota_zpatecka
+
+    address: 100
+    slave: 1
+    input_type: input
+    scale: 0.1
+    device_class: temperature
+    unit_of_measurement: '°C'
+
+  # B02.VAL — Teplota výstupu z TČ (input register 101, FC04)
+  - name: pzpe_ireg_ro_b02_teplota_vystup
+    unique_id: pzpe_ireg_ro_b02_teplota_vystup
+
+    address: 101
+    slave: 1
+    input_type: input
+    scale: 0.1
+    device_class: temperature
+    unit_of_measurement: '°C'
+
+  # B03.VAL — Teplota okolí výparníku (input register 102, FC04)
+  - name: pzpe_ireg_ro_b03_teplota_vyparnik
+    unique_id: pzpe_ireg_ro_b03_teplota_vyparnik
+
+    address: 102
+    slave: 1
+    input_type: input
+    scale: 0.1
+    device_class: temperature
+    unit_of_measurement: '°C'
+
+  # B04.VAL — Teplota povrchu výparníku (input register 103, FC04)
+  - name: pzpe_ireg_ro_b04_teplota_povrch_vyparnik
+    unique_id: pzpe_ireg_ro_b04_teplota_povrch_vyparnik
+
+    address: 103
+    slave: 1
+    input_type: input
+    scale: 0.1
+    device_class: temperature
+    unit_of_measurement: '°C'
+
+  # B11.VAL — Teplota vratné vody z otopné soustavy (input register 104, FC04)
+  - name: pzpe_ireg_ro_b11_teplota_vratna
+    unique_id: pzpe_ireg_ro_b11_teplota_vratna
+
+    address: 104
+    slave: 1
+    input_type: input
+    scale: 0.1
+    device_class: temperature
+    unit_of_measurement: '°C'
+
+  # B12.VAL — Teplota teplé vody pro regulaci (input register 105, FC04)
+  - name: pzpe_ireg_ro_b12_teplota_tv
+    unique_id: pzpe_ireg_ro_b12_teplota_tv
+
+    address: 105
+    slave: 1
+    input_type: input
+    scale: 0.1
+    device_class: temperature
+    unit_of_measurement: '°C'
+
+  # B13.VAL — Teplota za směšovačem 01 (input register 106, FC04)
+  - name: pzpe_ireg_ro_b13_teplota_smesovac_01
+    unique_id: pzpe_ireg_ro_b13_teplota_smesovac_01
+
+    address: 106
+    slave: 1
+    input_type: input
+    scale: 0.1
+    device_class: temperature
+    unit_of_measurement: '°C'
+
+  # B14.VAL — Teplota za směšovačem 02 (input register 107, FC04)
+  - name: pzpe_ireg_ro_b14_teplota_smesovac_02
+    unique_id: pzpe_ireg_ro_b14_teplota_smesovac_02
+
+    address: 107
+    slave: 1
+    input_type: input
+    scale: 0.1
+    device_class: temperature
+    unit_of_measurement: '°C'
+
+  # B17.VAL — Venkovní teplota (input register 108, FC04)
+  - name: pzpe_ireg_ro_b17_teplota_venkovni
+    unique_id: pzpe_ireg_ro_b17_teplota_venkovni
+
+    address: 108
+    slave: 1
+    input_type: input
+    scale: 0.1
+    device_class: temperature
+    unit_of_measurement: '°C'
+
+  # BRM01.VAL — Teplota Roommanager 01 (input register 109, FC04)
+  - name: pzpe_ireg_ro_brm01_teplota_rm01
+    unique_id: pzpe_ireg_ro_brm01_teplota_rm01
+
+    address: 109
+    slave: 1
+    input_type: input
+    scale: 0.1
+    device_class: temperature
+    unit_of_measurement: '°C'
+
+  # BRM02.VAL — Teplota Roommanager 02 (input register 110, FC04)
+  - name: pzpe_ireg_ro_brm02_teplota_rm02
+    unique_id: pzpe_ireg_ro_brm02_teplota_rm02
+
+    address: 110
+    slave: 1
+    input_type: input
+    scale: 0.1
+    device_class: temperature
+    unit_of_measurement: '°C'
+
+  # BRM03.VAL — Teplota Roommanager 03 (input register 111, FC04)
+  - name: pzpe_ireg_ro_brm03_teplota_rm03
+    unique_id: pzpe_ireg_ro_brm03_teplota_rm03
+
+    address: 111
+    slave: 1
+    input_type: input
+    scale: 0.1
+    device_class: temperature
+    unit_of_measurement: '°C'
+
+  # BRM04.VAL — Teplota Roommanager 04 (input register 112, FC04)
+  - name: pzpe_ireg_ro_brm04_teplota_rm04
+    unique_id: pzpe_ireg_ro_brm04_teplota_rm04
+
+    address: 112
+    slave: 1
+    input_type: input
+    scale: 0.1
+    device_class: temperature
+    unit_of_measurement: '°C'
+
+  # B07.VAL — Teplota výstupu z deskového výparníku (input register 113, FC04)
+  - name: pzpe_ireg_ro_b07_teplota_deskovy_vyparnik
+    unique_id: pzpe_ireg_ro_b07_teplota_deskovy_vyparnik
+
+    address: 113
+    slave: 1
+    input_type: input
+    scale: 0.1
+    device_class: temperature
+    unit_of_measurement: '°C'
+
+  # B08.VAL — Teplota na výstupu z deskového výparníku (input register 114, FC04)
+  - name: pzpe_ireg_ro_b08_teplota_vystup_deskovy
+    unique_id: pzpe_ireg_ro_b08_teplota_vystup_deskovy
+
+    address: 114
+    slave: 1
+    input_type: input
+    scale: 0.1
+    device_class: temperature
+    unit_of_measurement: '°C'
+
+  # B16.VAL — Teplota bazénové vody (input register 115, FC04)
+  - name: pzpe_ireg_ro_b16_teplota_bazen
+    unique_id: pzpe_ireg_ro_b16_teplota_bazen
+
+    address: 115
+    slave: 1
+    input_type: input
+    scale: 0.1
+    device_class: temperature
+    unit_of_measurement: '°C'
+
+  # B10.VAL — Teplota zpátečky z chlazení (input register 116, FC04)
+  - name: pzpe_ireg_ro_b10_teplota_zpatecka_chlazeni
+    unique_id: pzpe_ireg_ro_b10_teplota_zpatecka_chlazeni
+
+    address: 116
+    slave: 1
+    input_type: input
+    scale: 0.1
+    device_class: temperature
+    unit_of_measurement: '°C'
+
+  # B19.VAL — Teplota přívodu do topení (input register 117, FC04)
+  - name: pzpe_ireg_ro_b19_teplota_privod_topeni
+    unique_id: pzpe_ireg_ro_b19_teplota_privod_topeni
+
+    address: 117
+    slave: 1
+    input_type: input
+    scale: 0.1
+    device_class: temperature
+    unit_of_measurement: '°C'
+
+  # B18.VAL — Teplota teplé vody informativní (input register 118, FC04)
+  - name: pzpe_ireg_ro_b18_teplota_tv_info
+    unique_id: pzpe_ireg_ro_b18_teplota_tv_info
+
+    address: 118
+    slave: 1
+    input_type: input
+    scale: 0.1
+    device_class: temperature
+    unit_of_measurement: '°C'
+
+  # AT1.VAL — Průměrná venkovní teplota pro sezónu (input register 130, FC04)
+  - name: pzpe_ireg_ro_at1_prumerna_venkovni_sezona
+    unique_id: pzpe_ireg_ro_at1_prumerna_venkovni_sezona
+
+    address: 130
+    slave: 1
+    input_type: input
+    scale: 0.1
+    device_class: temperature
+    unit_of_measurement: '°C'
+
+  # AT2.VAL — Průměrná venkovní teplota pro řízení TČ (input register 131, FC04)
+  - name: pzpe_ireg_ro_at2_prumerna_venkovni_tc
+    unique_id: pzpe_ireg_ro_at2_prumerna_venkovni_tc
+
+    address: 131
+    slave: 1
+    input_type: input
+    scale: 0.1
+    device_class: temperature
+    unit_of_measurement: '°C'
+
+  # sC004.VAL — Dostupný výkon pro kompresor (input register 132, FC04)
+  - name: pzpe_ireg_ro_sc004_vykon_kompresor
+    unique_id: pzpe_ireg_ro_sc004_vykon_kompresor
+
+    address: 132
+    slave: 1
+    input_type: input
+    data_type: "uint16"
+
+  # sH010.VAL — Maximální příkon TČ (input register 133, FC04)
+  - name: pzpe_ireg_ro_sh010_max_prikon
+    unique_id: pzpe_ireg_ro_sh010_max_prikon
+
+    address: 133
+    slave: 1
+    input_type: input
+    data_type: "uint16"
+
+  # sH111.VAL — Aktuální platná sezóna, 0=Zima, 1=Léto (input register 134, FC04)
+  - name: pzpe_ireg_ro_sh111_sezona
+    unique_id: pzpe_ireg_ro_sh111_sezona
+
+    address: 134
+    slave: 1
+    input_type: input
+    data_type: "uint16"
+
+  # sM100.VAL — Směšovač 01, požadavek topení (input register 135, FC04)
+  - name: pzpe_ireg_ro_sm100_smesovac01_topeni
+    unique_id: pzpe_ireg_ro_sm100_smesovac01_topeni
+
+    address: 135
+    slave: 1
+    input_type: input
+    scale: 0.1
+    device_class: temperature
+    unit_of_measurement: '°C'
+
+  # sM200.VAL — Směšovač 02, požadavek topení (input register 136, FC04)
+  - name: pzpe_ireg_ro_sm200_smesovac02_topeni
+    unique_id: pzpe_ireg_ro_sm200_smesovac02_topeni
+
+    address: 136
+    slave: 1
+    input_type: input
+    scale: 0.1
+    device_class: temperature
+    unit_of_measurement: '°C'
+
+  # sO100.VAL — Aktuální požadavek teplé vody (input register 137, FC04)
+  - name: pzpe_ireg_ro_so100_pozadavek_tv
+    unique_id: pzpe_ireg_ro_so100_pozadavek_tv
+
+    address: 137
+    slave: 1
+    input_type: input
+    scale: 0.1
+    device_class: temperature
+    unit_of_measurement: '°C'
+
+  # sO101.VAL — Hystereze k požadavku teplé vody (input register 138, FC04)
+  - name: pzpe_ireg_ro_so101_hystereze_tv
+    unique_id: pzpe_ireg_ro_so101_hystereze_tv
+
+    address: 138
+    slave: 1
+    input_type: input
+    scale: 0.1
+    device_class: temperature
+    unit_of_measurement: '°C'
+
+  # sQ021.VAL — Funkční topný program, běh [%] (input register 139, FC04)
+  - name: pzpe_ireg_ro_sq021_funkcni_program_procenta
+    unique_id: pzpe_ireg_ro_sq021_funkcni_program_procenta
+
+    address: 139
+    slave: 1
+    input_type: input
+    data_type: "uint16"
+
+  # sQ022.VAL — Aktuální teplota funkčního topného programu (input register 140, FC04)
+  - name: pzpe_ireg_ro_sq022_funkcni_program_teplota
+    unique_id: pzpe_ireg_ro_sq022_funkcni_program_teplota
+
+    address: 140
+    slave: 1
+    input_type: input
+    scale: 0.1
+    device_class: temperature
+    unit_of_measurement: '°C'
+
+  # sR030.VAL — Regulační bod pro vytápění (input register 141, FC04)
+  - name: pzpe_ireg_ro_sr030_regbod_topeni
+    unique_id: pzpe_ireg_ro_sr030_regbod_topeni
+
+    address: 141
+    slave: 1
+    input_type: input
+    scale: 0.1
+    device_class: temperature
+    unit_of_measurement: '°C'
+
+  # sR070.VAL — Hystereze k regulačnímu bodu vytápění (input register 142, FC04)
+  - name: pzpe_ireg_ro_sr070_hystereze_topeni
+    unique_id: pzpe_ireg_ro_sr070_hystereze_topeni
+
+    address: 142
+    slave: 1
+    input_type: input
+    scale: 0.1
+    device_class: temperature
+    unit_of_measurement: '°C'
+
+
+  # sR080.VAL — Požadavek pro předehřev TV (input register 143, FC04)
+  - name: pzpe_ireg_ro_sr080_predehrev_tv
+    unique_id: pzpe_ireg_ro_sr080_predehrev_tv
+
+    address: 143
+    slave: 1
+    input_type: input
+    scale: 0.1
+    device_class: temperature
+    unit_of_measurement: '°C'
+
+  # sR100.VAL — Aktuální požadavek topení (input register 144, FC04)
+  - name: pzpe_ireg_ro_sr100_aktualni_pozadavek_topeni
+    unique_id: pzpe_ireg_ro_sr100_aktualni_pozadavek_topeni
+
+    address: 144
+    slave: 1
+    input_type: input
+    scale: 0.1
+    device_class: temperature
+    unit_of_measurement: '°C'
+
+  # sR110.VAL — Aktuální teplota zpátečky z topení (input register 145, FC04)
+  - name: pzpe_ireg_ro_sr110_aktualni_teplota_zpatecka
+    unique_id: pzpe_ireg_ro_sr110_aktualni_teplota_zpatecka
+
+    address: 145
+    slave: 1
+    input_type: input
+    scale: 0.1
+    device_class: temperature
+    unit_of_measurement: '°C'
+
+  # sM105.VAL — Směšovač 01, požadavek chlazení (input register 146, FC04)
+  - name: pzpe_ireg_ro_sm105_smesovac01_chlazeni
+    unique_id: pzpe_ireg_ro_sm105_smesovac01_chlazeni
+
+    address: 146
+    slave: 1
+    input_type: input
+    scale: 0.1
+    device_class: temperature
+    unit_of_measurement: '°C'
+
+  # sM205.VAL — Směšovač 02, požadavek chlazení (input register 147, FC04)
+  - name: pzpe_ireg_ro_sm205_smesovac02_chlazeni
+    unique_id: pzpe_ireg_ro_sm205_smesovac02_chlazeni
+
+    address: 147
+    slave: 1
+    input_type: input
+    scale: 0.1
+    device_class: temperature
+    unit_of_measurement: '°C'
+
+  # sR300.VAL — Aktuální požadavek chlazení (input register 148, FC04)
+  - name: pzpe_ireg_ro_sr300_aktualni_pozadavek_chlazeni
+    unique_id: pzpe_ireg_ro_sr300_aktualni_pozadavek_chlazeni
+
+    address: 148
+    slave: 1
+    input_type: input
+    scale: 0.1
+    device_class: temperature
+    unit_of_measurement: '°C'
+
+  # Stav bivalence topení (input register 149, FC04)
+  - name: pzpe_ireg_ro_bivalence_topeni
+    unique_id: pzpe_ireg_ro_bivalence_topeni
+
+    address: 149
+    slave: 1
+    input_type: input
+    data_type: "uint16"
+
+  # Stav bivalence TV (input register 150, FC04)
+  - name: pzpe_ireg_ro_bivalence_tv
+    unique_id: pzpe_ireg_ro_bivalence_tv
+
+    address: 150
+    slave: 1
+    input_type: input
+    data_type: "uint16"
+
+  # sNoCircuits.VAL — Počet okruhů (input register 151, FC04)
+  - name: pzpe_ireg_ro_snocircuits_pocet_okruhu
+    unique_id: pzpe_ireg_ro_snocircuits_pocet_okruhu
+
+    address: 151
+    slave: 1
+    input_type: input
+    data_type: "uint16"
+
+  # sNoMix.VAL — Počet směšovačů (input register 152, FC04)
+  - name: pzpe_ireg_ro_snomix_pocet_smesovac
+    unique_id: pzpe_ireg_ro_snomix_pocet_smesovac
+
+    address: 152
+    slave: 1
+    input_type: input
+    data_type: "uint16"
+
+  # R040.VAL — Číslo křivky topení (holding register 5000, FC03)
+  - name: pzpe_hreg_ro_r040_krivka_topeni
+    unique_id: pzpe_hreg_ro_r040_krivka_topeni
+    slave: 1
+    address: 5000
+    input_type: "holding"
+    data_type: "uint16"
+
+  # M140.VAL — Číslo křivky topení pro směšovač 01 (holding register 5001, FC03)
+  - name: pzpe_hreg_ro_m140_krivka_smesovac01
+    unique_id: pzpe_hreg_ro_m140_krivka_smesovac01
+    slave: 1
+    address: 5001
+    input_type: "holding"
+    data_type: "uint16"
+
+  # M240.VAL — Číslo křivky topení pro směšovač 02 (holding register 5002, FC03)
+  - name: pzpe_hreg_ro_m240_krivka_smesovac02
+    unique_id: pzpe_hreg_ro_m240_krivka_smesovac02
+    slave: 1
+    address: 5002
+    input_type: "holding"
+    data_type: "uint16"
+
+  # Stavy tepelného čerpadla — bitová maska (holding register 5003, FC03)
+  - name: pzpe_hreg_ro_stav_tc
+    unique_id: pzpe_hreg_ro_stav_tc
+    slave: 1
+    address: 5003
+    input_type: "holding"
+    data_type: "uint16"
+
+  # WR50005.VAL — Registr povolení funkcí řízení (holding register 50005, FC03)
+  - name: pzpe_hreg_rw_wr50005
+    unique_id: pzpe_hreg_rw_wr50005
+    slave: 1
+    address: 50005
+    input_type: "holding"
+    data_type: "uint16"
+
+  # WR50015.VAL — Povolení teplé vody (holding register 50015, FC03)
+  - name: pzpe_hreg_rw_wr50015
+    unique_id: pzpe_hreg_rw_wr50015
+    slave: 1
+    address: 50015
+    input_type: "holding"
+    data_type: "uint16"
+
+  # WR50100.VAL — Regulační bod topení (holding register 50100, FC03, /10)
+  - name: pzpe_hreg_rw_wr50100_regbod_topeni
+    unique_id: pzpe_hreg_rw_wr50100_regbod_topeni
+
+    address: 50100
+    slave: 1
+    input_type: input
+    scale: 0.1
+    device_class: temperature
+    unit_of_measurement: '°C'
+
+  # WR50108.VAL — Regulační bod teplé vody (holding register 50108, FC03, /10)
+  - name: pzpe_hreg_rw_wr50108_regbod_tv
+    unique_id: pzpe_hreg_rw_wr50108_regbod_tv
+
+    address: 50108
+    slave: 1
+    input_type: input
+    scale: 0.1
+    device_class: temperature
+    unit_of_measurement: '°C'
+
+
+# ---------------------------------------------------------------------------
+# BINARY SENSORS (modbus binary_sensor — čtení coilů)
+# ---------------------------------------------------------------------------
+binary_sensors:
+
+  # Nadřazené řízení TČ je aktivní (coil 50000, read-only)
+  - name: pzpe_coil_ro_nadrazene_rizeni_aktivni
+    unique_id: pzpe_coil_ro_nadrazene_rizeni_aktivni
+
+    address: 50000
+    slave: 1
+    input_type: coil
+
+  # sWC50001.Val — Ohlášení nadřazeného řízení (coil 50001)
+  - name: pzpe_coil_rw_wc50001_ohlaseni
+    unique_id: pzpe_coil_rw_wc50001_ohlaseni
+
+    address: 50001
+    slave: 1
+    input_type: coil
+
+  # Povolit funkci přípravy teplé vody (coil 2008)
+  - name: pzpe_coil_rw_povolit_ohrev_tv
+    unique_id: pzpe_coil_rw_povolit_ohrev_tv
+
+    address: 2008
+    slave: 1
+    input_type: coil
+
+  # Pohotovostní režim TČ (coil 2023)
+  - name: pzpe_coil_rw_pohotovostni_rezim
+    unique_id: pzpe_coil_rw_pohotovostni_rezim
+
+    address: 2023
+    slave: 1
+    input_type: coil
+
+  # Blokování signálem HDO (coil 1000)
+  - name: pzpe_coil_ro_blokovani_hdo
+    unique_id: pzpe_coil_ro_blokovani_hdo
+
+    address: 1000
+    slave: 1
+    input_type: coil
+
+  # Probíhá přímotopný dohřev TV (coil 630)
+  - name: pzpe_coil_ro_dohrev_primotopny
+    unique_id: pzpe_coil_ro_dohrev_primotopny
+
+    address: 630
+    slave: 1
+    input_type: coil
+
+  # Probíhá nepřímotopný dohřev TV (coil 632)
+  - name: pzpe_coil_ro_dohrev_neprimotopny
+    unique_id: pzpe_coil_ro_dohrev_neprimotopny
+
+    address: 632
+    slave: 1
+    input_type: coil
+
+# ---------------------------------------------------------------------------
+# SWITCHES (modbus switch — zápis coilů)
+# ---------------------------------------------------------------------------
+switches:
+
+  # Povolit přípravy teplé vody (coil 2008)
+  - name: pzpe_coil_rw_povolit_ohrev_tv_sw
+    unique_id: pzpe_coil_rw_povolit_ohrev_tv_sw
+
+    address: 2008
+    slave: 1
+    write_type: coil
+    verify:
+
+  # Pohotovostní režim TČ (coil 2023)
+  - name: pzpe_coil_rw_pohotovostni_rezim_sw
+    unique_id: pzpe_coil_rw_pohotovostni_rezim_sw
+
+    address: 2023
+    slave: 1
+    write_type: coil
+    verify:
+
+# ---------------------------------------------------------------------------
+# CLIMATES (modbus climate — čtení + zápis)
+# ---------------------------------------------------------------------------
+climates:
+
+  # Regulační bod teplé vody — čtení B12 (addr 105), zápis WR50108 (addr 50108)
+  - name: pzpe_climate_rw_regbod_tv
+    unique_id: pzpe_climate_rw_regbod_tv
+    address: 105
+    input_type: holding
+    data_type: int16
+    min_temp: 20
+    max_temp: 70
+    offset: 0
+    precision: 1
+    scale: 0.1
+    target_temp_register: 50108
+    target_temp_write_registers: true
+    temp_step: 1
+    temperature_unit: C
+
+  # Regulační bod topení — čtení B11 (addr 104), zápis WR50100 (addr 50100)
+  - name: pzpe_climate_rw_regbod_topeni
+    unique_id: pzpe_climate_rw_regbod_topeni
+    address: 104
+    input_type: holding
+    data_type: int16
+    min_temp: 15
+    max_temp: 35
+    offset: 0
+    precision: 1
+    scale: 0.1
+    target_temp_register: 50100
+    target_temp_write_registers: true
+    temp_step: 1
+    temperature_unit: C
