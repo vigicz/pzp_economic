@@ -163,6 +163,289 @@
   mode: single
 
 # -----------------------------------------------------------------------------
+# WR50050 — obousměrná synchronizace bitového registru (kompresor a ventilátor)
+# -----------------------------------------------------------------------------
+
+- id: pzpe_wr50050_zapis
+  alias: PZPE, zápis do registru WR50050
+  description: Při změně jakéhokoli WR50050 bitu zapíše novou dekadickou hodnotu do TČ
+  triggers:
+  - platform: state
+    entity_id:
+    - input_boolean.pzpe_ib_wr50050_bit0_rizeni_kompresoru
+    - input_boolean.pzpe_ib_wr50050_bit1_blokovani_kompresoru
+    - input_boolean.pzpe_ib_wr50050_bit2_anticyklicka_ochrana
+    - input_boolean.pzpe_ib_wr50050_bit8_utlum_ventilatoru
+    - input_boolean.pzpe_ib_wr50050_bit9_odtavani_reverzaci
+  conditions:
+  - condition: template
+    value_template: >
+      {{ states('sensor.pzpe_tpl_wr50050_hodnota')|int(0)
+         != states('sensor.pzpe_hreg_rw_wr50050')|int(0) }}
+  actions:
+  - service: modbus.write_register
+    data:
+      hub: pzpe
+      address: 50050
+      slave: 1
+      value: '{{ states(''sensor.pzpe_tpl_wr50050_hodnota'')|int }}'
+  mode: single
+
+- id: pzpe_wr50050_sync
+  alias: PZPE, sync WR50050 z TČ do input_boolean
+  description: Při změně sensoru WR50050 nastaví jednotlivé input_boolean dle bitů
+  triggers:
+  - platform: state
+    entity_id: sensor.pzpe_hreg_rw_wr50050
+  - platform: homeassistant
+    event: start
+  conditions:
+  - condition: template
+    value_template: >
+      {{ states('sensor.pzpe_hreg_rw_wr50050') not in ['unknown', 'unavailable'] }}
+  actions:
+  - variables:
+      val: "{{ states('sensor.pzpe_hreg_rw_wr50050') | int(0) }}"
+  # bit 0
+  - action: >
+      {{ 'input_boolean.turn_on' if (val | int | bitwise_and(1)) > 0 else 'input_boolean.turn_off' }}
+    target:
+      entity_id: input_boolean.pzpe_ib_wr50050_bit0_rizeni_kompresoru
+  # bit 1
+  - action: >
+      {{ 'input_boolean.turn_on' if (val | int | bitwise_and(2)) > 0 else 'input_boolean.turn_off' }}
+    target:
+      entity_id: input_boolean.pzpe_ib_wr50050_bit1_blokovani_kompresoru
+  # bit 2
+  - action: >
+      {{ 'input_boolean.turn_on' if (val | int | bitwise_and(4)) > 0 else 'input_boolean.turn_off' }}
+    target:
+      entity_id: input_boolean.pzpe_ib_wr50050_bit2_anticyklicka_ochrana
+  # bit 8
+  - action: >
+      {{ 'input_boolean.turn_on' if (val | int | bitwise_and(256)) > 0 else 'input_boolean.turn_off' }}
+    target:
+      entity_id: input_boolean.pzpe_ib_wr50050_bit8_utlum_ventilatoru
+  # bit 9
+  - action: >
+      {{ 'input_boolean.turn_on' if (val | int | bitwise_and(512)) > 0 else 'input_boolean.turn_off' }}
+    target:
+      entity_id: input_boolean.pzpe_ib_wr50050_bit9_odtavani_reverzaci
+  mode: single
+
+# -----------------------------------------------------------------------------
+# WR50055 — obousměrná synchronizace bitového registru (elektrokotel)
+# -----------------------------------------------------------------------------
+
+- id: pzpe_wr50055_zapis
+  alias: PZPE, zápis do registru WR50055
+  description: Při změně jakéhokoli WR50055 bitu zapíše novou dekadickou hodnotu do TČ
+  triggers:
+  - platform: state
+    entity_id:
+    - input_boolean.pzpe_ib_wr50055_bit0_rizeni_elektrokotle
+    - input_boolean.pzpe_ib_wr50055_bit1_stupne_elektrokotle
+    - input_boolean.pzpe_ib_wr50055_bit2_blokovani_elektrokotle
+    - input_boolean.pzpe_ib_wr50055_bit3_topnice_elektrokotle
+  conditions:
+  - condition: template
+    value_template: >
+      {{ states('sensor.pzpe_tpl_wr50055_hodnota')|int(0)
+         != states('sensor.pzpe_hreg_rw_wr50055')|int(0) }}
+  actions:
+  - service: modbus.write_register
+    data:
+      hub: pzpe
+      address: 50055
+      slave: 1
+      value: '{{ states(''sensor.pzpe_tpl_wr50055_hodnota'')|int }}'
+  mode: single
+
+- id: pzpe_wr50055_sync
+  alias: PZPE, sync WR50055 z TČ do input_boolean
+  description: Při změně sensoru WR50055 nastaví jednotlivé input_boolean dle bitů
+  triggers:
+  - platform: state
+    entity_id: sensor.pzpe_hreg_rw_wr50055
+  - platform: homeassistant
+    event: start
+  conditions:
+  - condition: template
+    value_template: >
+      {{ states('sensor.pzpe_hreg_rw_wr50055') not in ['unknown', 'unavailable'] }}
+  actions:
+  - variables:
+      val: "{{ states('sensor.pzpe_hreg_rw_wr50055') | int(0) }}"
+  # bit 0
+  - action: >
+      {{ 'input_boolean.turn_on' if (val | int | bitwise_and(1)) > 0 else 'input_boolean.turn_off' }}
+    target:
+      entity_id: input_boolean.pzpe_ib_wr50055_bit0_rizeni_elektrokotle
+  # bit 1
+  - action: >
+      {{ 'input_boolean.turn_on' if (val | int | bitwise_and(2)) > 0 else 'input_boolean.turn_off' }}
+    target:
+      entity_id: input_boolean.pzpe_ib_wr50055_bit1_stupne_elektrokotle
+  # bit 2
+  - action: >
+      {{ 'input_boolean.turn_on' if (val | int | bitwise_and(4)) > 0 else 'input_boolean.turn_off' }}
+    target:
+      entity_id: input_boolean.pzpe_ib_wr50055_bit2_blokovani_elektrokotle
+  # bit 3
+  - action: >
+      {{ 'input_boolean.turn_on' if (val | int | bitwise_and(8)) > 0 else 'input_boolean.turn_off' }}
+    target:
+      entity_id: input_boolean.pzpe_ib_wr50055_bit3_topnice_elektrokotle
+  mode: single
+
+# -----------------------------------------------------------------------------
+# WR50114 — Nastavení sezóny (0=Topná sezóna, 1=Léto)
+# -----------------------------------------------------------------------------
+
+- id: pzpe_wr50114_zapis
+  alias: PZPE, zápis do registru WR50114
+  description: Při změně input_select zapíše odpovídající číselnou hodnotu (0/1) do TČ
+  triggers:
+  - platform: state
+    entity_id: input_select.pzpe_is_wr50114_sezona
+  conditions:
+  - condition: template
+    value_template: >
+      {% set mapa = {'Topná sezóna': 0, 'Léto': 1} %}
+      {{ mapa[states('input_select.pzpe_is_wr50114_sezona')]
+         != states('sensor.pzpe_hreg_rw_wr50114_sezona')|int(0) }}
+  actions:
+  - service: modbus.write_register
+    data:
+      hub: pzpe
+      address: 50114
+      slave: 1
+      value: >
+        {% set mapa = {'Topná sezóna': 0, 'Léto': 1} %}
+        {{ mapa[states('input_select.pzpe_is_wr50114_sezona')] }}
+  mode: single
+
+- id: pzpe_wr50114_sync
+  alias: PZPE, sync WR50114 z TČ do input_select
+  description: Při změně sensoru WR50114 nastaví input_select dle hodnoty registru
+  triggers:
+  - platform: state
+    entity_id: sensor.pzpe_hreg_rw_wr50114_sezona
+  - platform: homeassistant
+    event: start
+  conditions:
+  - condition: template
+    value_template: >
+      {{ states('sensor.pzpe_hreg_rw_wr50114_sezona') not in ['unknown', 'unavailable'] }}
+  actions:
+  - service: input_select.select_option
+    target:
+      entity_id: input_select.pzpe_is_wr50114_sezona
+    data:
+      option: >
+        {% set mapa = {0: 'Topná sezóna', 1: 'Léto'} %}
+        {{ mapa[states('sensor.pzpe_hreg_rw_wr50114_sezona')|int(0)] }}
+  mode: single
+
+# -----------------------------------------------------------------------------
+# WR50115 — Nastavení provozního režimu (0=Sleep, 1=Demo, 2=Auto, 3=Test, 4=Service)
+# -----------------------------------------------------------------------------
+
+- id: pzpe_wr50115_zapis
+  alias: PZPE, zápis do registru WR50115
+  description: Při změně input_select zapíše odpovídající číselnou hodnotu (0–4) do TČ
+  triggers:
+  - platform: state
+    entity_id: input_select.pzpe_is_wr50115_provozni_rezim
+  conditions:
+  - condition: template
+    value_template: >
+      {% set mapa = {'Sleep': 0, 'Demo': 1, 'Auto': 2, 'Test': 3, 'Service': 4} %}
+      {{ mapa[states('input_select.pzpe_is_wr50115_provozni_rezim')]
+         != states('sensor.pzpe_hreg_rw_wr50115_provozni_rezim')|int(0) }}
+  actions:
+  - service: modbus.write_register
+    data:
+      hub: pzpe
+      address: 50115
+      slave: 1
+      value: >
+        {% set mapa = {'Sleep': 0, 'Demo': 1, 'Auto': 2, 'Test': 3, 'Service': 4} %}
+        {{ mapa[states('input_select.pzpe_is_wr50115_provozni_rezim')] }}
+  mode: single
+
+- id: pzpe_wr50115_sync
+  alias: PZPE, sync WR50115 z TČ do input_select
+  description: Při změně sensoru WR50115 nastaví input_select dle hodnoty registru
+  triggers:
+  - platform: state
+    entity_id: sensor.pzpe_hreg_rw_wr50115_provozni_rezim
+  - platform: homeassistant
+    event: start
+  conditions:
+  - condition: template
+    value_template: >
+      {{ states('sensor.pzpe_hreg_rw_wr50115_provozni_rezim') not in ['unknown', 'unavailable'] }}
+  actions:
+  - service: input_select.select_option
+    target:
+      entity_id: input_select.pzpe_is_wr50115_provozni_rezim
+    data:
+      option: >
+        {% set mapa = {0: 'Sleep', 1: 'Demo', 2: 'Auto', 3: 'Test', 4: 'Service'} %}
+        {{ mapa[states('sensor.pzpe_hreg_rw_wr50115_provozni_rezim')|int(0)] }}
+  mode: single
+
+# -----------------------------------------------------------------------------
+# WR50116 — Režim odtávání reverzací výparníku 1 (0=Auto, 1=Zap, 2=Vyp)
+# -----------------------------------------------------------------------------
+
+- id: pzpe_wr50116_zapis
+  alias: PZPE, zápis do registru WR50116
+  description: Při změně input_select zapíše odpovídající číselnou hodnotu (0/1/2) do TČ
+  triggers:
+  - platform: state
+    entity_id: input_select.pzpe_is_wr50116_odtavani_reverzaci
+  conditions:
+  - condition: template
+    value_template: >
+      {% set mapa = {'Automaticky': 0, 'Zapnout': 1, 'Vypnout': 2} %}
+      {{ mapa[states('input_select.pzpe_is_wr50116_odtavani_reverzaci')]
+         != states('sensor.pzpe_hreg_rw_wr50116_odtavani_reverzaci')|int(0) }}
+  actions:
+  - service: modbus.write_register
+    data:
+      hub: pzpe
+      address: 50116
+      slave: 1
+      value: >
+        {% set mapa = {'Automaticky': 0, 'Zapnout': 1, 'Vypnout': 2} %}
+        {{ mapa[states('input_select.pzpe_is_wr50116_odtavani_reverzaci')] }}
+  mode: single
+
+- id: pzpe_wr50116_sync
+  alias: PZPE, sync WR50116 z TČ do input_select
+  description: Při změně sensoru WR50116 nastaví input_select dle hodnoty registru
+  triggers:
+  - platform: state
+    entity_id: sensor.pzpe_hreg_rw_wr50116_odtavani_reverzaci
+  - platform: homeassistant
+    event: start
+  conditions:
+  - condition: template
+    value_template: >
+      {{ states('sensor.pzpe_hreg_rw_wr50116_odtavani_reverzaci') not in ['unknown', 'unavailable'] }}
+  actions:
+  - service: input_select.select_option
+    target:
+      entity_id: input_select.pzpe_is_wr50116_odtavani_reverzaci
+    data:
+      option: >
+        {% set mapa = {0: 'Automaticky', 1: 'Zapnout', 2: 'Vypnout'} %}
+        {{ mapa[states('sensor.pzpe_hreg_rw_wr50116_odtavani_reverzaci')|int(0)] }}
+  mode: single
+
+# -----------------------------------------------------------------------------
 # Ohlášení nadřazeného řízení — nutné pro fungování externího řízení TČ
 # -----------------------------------------------------------------------------
 

@@ -27,3 +27,24 @@ sensor:
        + (is_state('input_boolean.pzpe_ib_wr50015_bit1_hystereze_tv', 'on') | int * 2)
        + (is_state('input_boolean.pzpe_ib_wr50015_bit2_blokovani_pripravy_tv', 'on') | int * 4)
        + (is_state('input_boolean.pzpe_ib_wr50015_bit3_blokovani_dohrevu_tv', 'on') | int * 8) }}
+
+  # pzpe_tpl_wr50050_hodnota — Dekadická hodnota pro zápis do WR50050
+  # Součet 2^N za každý zapnutý input_boolean (bity 0,1,2,8,9)
+  - name: pzpe_tpl_wr50050_hodnota
+    unique_id: pzpe_tpl_wr50050_hodnota
+    state: >-
+      {{ (is_state('input_boolean.pzpe_ib_wr50050_bit0_rizeni_kompresoru', 'on') | int * 1)
+       + (is_state('input_boolean.pzpe_ib_wr50050_bit1_blokovani_kompresoru', 'on') | int * 2)
+       + (is_state('input_boolean.pzpe_ib_wr50050_bit2_anticyklicka_ochrana', 'on') | int * 4)
+       + (is_state('input_boolean.pzpe_ib_wr50050_bit8_utlum_ventilatoru', 'on') | int * 256)
+       + (is_state('input_boolean.pzpe_ib_wr50050_bit9_odtavani_reverzaci', 'on') | int * 512) }}
+
+  # pzpe_tpl_wr50055_hodnota — Dekadická hodnota pro zápis do WR50055
+  # Součet 2^N za každý zapnutý input_boolean (bity 0,1,2,3)
+  - name: pzpe_tpl_wr50055_hodnota
+    unique_id: pzpe_tpl_wr50055_hodnota
+    state: >-
+      {{ (is_state('input_boolean.pzpe_ib_wr50055_bit0_rizeni_elektrokotle', 'on') | int * 1)
+       + (is_state('input_boolean.pzpe_ib_wr50055_bit1_stupne_elektrokotle', 'on') | int * 2)
+       + (is_state('input_boolean.pzpe_ib_wr50055_bit2_blokovani_elektrokotle', 'on') | int * 4)
+       + (is_state('input_boolean.pzpe_ib_wr50055_bit3_topnice_elektrokotle', 'on') | int * 8) }}

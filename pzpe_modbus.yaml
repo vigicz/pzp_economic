@@ -511,6 +511,57 @@ sensors:
     input_type: "holding"
     data_type: "uint16"
 
+  # WR50050.VAL — Povolení funkcí kompresoru a ventilátoru (holding register 50050, FC03)
+  - name: pzpe_hreg_rw_wr50050
+    unique_id: pzpe_hreg_rw_wr50050
+    slave: 1
+    address: 50050
+    input_type: "holding"
+    data_type: "uint16"
+
+  # WR50055.VAL — Povolení funkcí elektrokotle (holding register 50055, FC03)
+  - name: pzpe_hreg_rw_wr50055
+    unique_id: pzpe_hreg_rw_wr50055
+    slave: 1
+    address: 50055
+    input_type: "holding"
+    data_type: "uint16"
+
+  # WR50113.VAL — Počet stupňů elektrokotle (holding register 50113, FC03)
+  - name: pzpe_hreg_rw_wr50113_stupne_elektrokotle
+    unique_id: pzpe_hreg_rw_wr50113_stupne_elektrokotle
+    slave: 1
+    address: 50113
+    input_type: "holding"
+    data_type: "uint16"
+
+  # WR50114.VAL — Nastavení sezóny (holding register 50114, FC03)
+  # 0=Topná sezóna, 1=Léto
+  - name: pzpe_hreg_rw_wr50114_sezona
+    unique_id: pzpe_hreg_rw_wr50114_sezona
+    slave: 1
+    address: 50114
+    input_type: "holding"
+    data_type: "uint16"
+
+  # WR50115.VAL — Nastavení provozního režimu (holding register 50115, FC03)
+  # 0=Sleep, 1=Demo, 2=Auto, 3=Test, 4=Service
+  - name: pzpe_hreg_rw_wr50115_provozni_rezim
+    unique_id: pzpe_hreg_rw_wr50115_provozni_rezim
+    slave: 1
+    address: 50115
+    input_type: "holding"
+    data_type: "uint16"
+
+  # WR50116.VAL — Režim odtávání reverzací výparníku 1 (holding register 50116, FC03)
+  # 0=Automaticky, 1=Zapnout, 2=Vypnout
+  - name: pzpe_hreg_rw_wr50116_odtavani_reverzaci
+    unique_id: pzpe_hreg_rw_wr50116_odtavani_reverzaci
+    slave: 1
+    address: 50116
+    input_type: "holding"
+    data_type: "uint16"
+
   # WR50100.VAL — Regulační bod topení (holding register 50100, FC03, /10)
   - name: pzpe_hreg_rw_wr50100_regbod_topeni
     unique_id: pzpe_hreg_rw_wr50100_regbod_topeni
@@ -595,6 +646,70 @@ binary_sensors:
     slave: 1
     input_type: coil
 
+  # WC50023 — Řízení kompresoru aktivní (coil 50023, RW)
+  - name: pzpe_coil_rw_wc50023_rizeni_kompresoru
+    unique_id: pzpe_coil_rw_wc50023_rizeni_kompresoru
+
+    address: 50023
+    slave: 1
+    input_type: coil
+
+  # WC50024 — Blokování kompresoru aktivní (coil 50024, RW)
+  - name: pzpe_coil_rw_wc50024_blokovani_kompresoru
+    unique_id: pzpe_coil_rw_wc50024_blokovani_kompresoru
+
+    address: 50024
+    slave: 1
+    input_type: coil
+
+  # WC50025 — Útlum ventilátoru aktivní (coil 50025, RW)
+  - name: pzpe_coil_rw_wc50025_utlum_ventilatoru
+    unique_id: pzpe_coil_rw_wc50025_utlum_ventilatoru
+
+    address: 50025
+    slave: 1
+    input_type: coil
+
+  # WC50032 — Anticyklická ochrana vypnuta (coil 50032, RW)
+  - name: pzpe_coil_rw_wc50032_anticyklicka_ochrana
+    unique_id: pzpe_coil_rw_wc50032_anticyklicka_ochrana
+
+    address: 50032
+    slave: 1
+    input_type: coil
+
+  # WC50026 — Přímé řízení provozu elektrokotle (coil 50026, RW)
+  - name: pzpe_coil_rw_wc50026_provoz_elektrokotle
+    unique_id: pzpe_coil_rw_wc50026_provoz_elektrokotle
+
+    address: 50026
+    slave: 1
+    input_type: coil
+
+  # WC50027 — Přímé řízení topného tělesa 1 elektrokotle (coil 50027, RW)
+  - name: pzpe_coil_rw_wc50027_topne_teleso1
+    unique_id: pzpe_coil_rw_wc50027_topne_teleso1
+
+    address: 50027
+    slave: 1
+    input_type: coil
+
+  # WC50028 — Přímé řízení topného tělesa 2 elektrokotle (coil 50028, RW)
+  - name: pzpe_coil_rw_wc50028_topne_teleso2
+    unique_id: pzpe_coil_rw_wc50028_topne_teleso2
+
+    address: 50028
+    slave: 1
+    input_type: coil
+
+  # WC50029 — Blokování provozu elektrokotle (coil 50029, RW)
+  - name: pzpe_coil_rw_wc50029_blokovani_elektrokotle
+    unique_id: pzpe_coil_rw_wc50029_blokovani_elektrokotle
+
+    address: 50029
+    slave: 1
+    input_type: coil
+
 # ---------------------------------------------------------------------------
 # SWITCHES (modbus switch — zápis coilů)
 # ---------------------------------------------------------------------------
@@ -614,6 +729,78 @@ switches:
     unique_id: pzpe_coil_rw_pohotovostni_rezim_sw
 
     address: 2023
+    slave: 1
+    write_type: coil
+    verify:
+
+  # WC50023 — Řízení kompresoru (coil 50023, RW)
+  - name: pzpe_coil_rw_wc50023_rizeni_kompresoru_sw
+    unique_id: pzpe_coil_rw_wc50023_rizeni_kompresoru_sw
+
+    address: 50023
+    slave: 1
+    write_type: coil
+    verify:
+
+  # WC50024 — Blokování kompresoru (coil 50024, RW)
+  - name: pzpe_coil_rw_wc50024_blokovani_kompresoru_sw
+    unique_id: pzpe_coil_rw_wc50024_blokovani_kompresoru_sw
+
+    address: 50024
+    slave: 1
+    write_type: coil
+    verify:
+
+  # WC50025 — Útlum ventilátoru (coil 50025, RW)
+  - name: pzpe_coil_rw_wc50025_utlum_ventilatoru_sw
+    unique_id: pzpe_coil_rw_wc50025_utlum_ventilatoru_sw
+
+    address: 50025
+    slave: 1
+    write_type: coil
+    verify:
+
+  # WC50032 — Anticyklická ochrana (coil 50032, RW)
+  - name: pzpe_coil_rw_wc50032_anticyklicka_ochrana_sw
+    unique_id: pzpe_coil_rw_wc50032_anticyklicka_ochrana_sw
+
+    address: 50032
+    slave: 1
+    write_type: coil
+    verify:
+
+  # WC50026 — Přímé řízení provozu elektrokotle (coil 50026, RW)
+  - name: pzpe_coil_rw_wc50026_provoz_elektrokotle_sw
+    unique_id: pzpe_coil_rw_wc50026_provoz_elektrokotle_sw
+
+    address: 50026
+    slave: 1
+    write_type: coil
+    verify:
+
+  # WC50027 — Přímé řízení topného tělesa 1 elektrokotle (coil 50027, RW)
+  - name: pzpe_coil_rw_wc50027_topne_teleso1_sw
+    unique_id: pzpe_coil_rw_wc50027_topne_teleso1_sw
+
+    address: 50027
+    slave: 1
+    write_type: coil
+    verify:
+
+  # WC50028 — Přímé řízení topného tělesa 2 elektrokotle (coil 50028, RW)
+  - name: pzpe_coil_rw_wc50028_topne_teleso2_sw
+    unique_id: pzpe_coil_rw_wc50028_topne_teleso2_sw
+
+    address: 50028
+    slave: 1
+    write_type: coil
+    verify:
+
+  # WC50029 — Blokování provozu elektrokotle (coil 50029, RW)
+  - name: pzpe_coil_rw_wc50029_blokovani_elektrokotle_sw
+    unique_id: pzpe_coil_rw_wc50029_blokovani_elektrokotle_sw
+
+    address: 50029
     slave: 1
     write_type: coil
     verify:

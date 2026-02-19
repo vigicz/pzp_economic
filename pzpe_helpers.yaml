@@ -68,6 +68,91 @@ input_boolean:
   pzpe_ib_wr50015_bit3_blokovani_dohrevu_tv:
     name: "WR50015 bit3: Blokování dohřevu teplé vody"
 
+  # -------------------------------------------------------------------------
+  # WR50050 — bitové povolení funkcí kompresoru a ventilátoru (addr 50050)
+  # Každý input_boolean = 1 bit registru. Obousměrná synchronizace
+  # s TČ zajištěna automatizacemi v pzpe_automations.yaml.
+  # -------------------------------------------------------------------------
+
+  # bit 0 (hodnota 1) — Povolení řízení kompresoru, coil 50023
+  pzpe_ib_wr50050_bit0_rizeni_kompresoru:
+    name: "WR50050 bit0: Řízení kompresoru"
+
+  # bit 1 (hodnota 2) — Povolení blokování provozu kompresoru, coil 50024
+  pzpe_ib_wr50050_bit1_blokovani_kompresoru:
+    name: "WR50050 bit1: Blokování kompresoru"
+
+  # bit 2 (hodnota 4) — Povolení vypnutí anticyklické ochrany kompresoru, coil 50032
+  pzpe_ib_wr50050_bit2_anticyklicka_ochrana:
+    name: "WR50050 bit2: Vypnutí anticyklické ochrany"
+
+  # bit 8 (hodnota 256) — Povolení řízení útlumu ventilátoru, coil 50025
+  pzpe_ib_wr50050_bit8_utlum_ventilatoru:
+    name: "WR50050 bit8: Útlum ventilátoru"
+
+  # bit 9 (hodnota 512) — Povolení řízení odtávání reverzací, reg 15116
+  pzpe_ib_wr50050_bit9_odtavani_reverzaci:
+    name: "WR50050 bit9: Odtávání reverzací"
+
+  # -------------------------------------------------------------------------
+  # WR50055 — bitové povolení funkcí elektrokotle (addr 50055)
+  # Každý input_boolean = 1 bit registru. Obousměrná synchronizace
+  # s TČ zajištěna automatizacemi v pzpe_automations.yaml.
+  # -------------------------------------------------------------------------
+
+  # bit 0 (hodnota 1) — Povolení řízení elektrokotle, coil 50026
+  pzpe_ib_wr50055_bit0_rizeni_elektrokotle:
+    name: "WR50055 bit0: Řízení elektrokotle"
+
+  # bit 1 (hodnota 2) — Povolení nastavení počtu stupňů elektrokotle, reg. 50113
+  pzpe_ib_wr50055_bit1_stupne_elektrokotle:
+    name: "WR50055 bit1: Počet stupňů elektrokotle"
+
+  # bit 2 (hodnota 4) — Povolení funkce blokování provozu elektrokotle, coil 50029
+  pzpe_ib_wr50055_bit2_blokovani_elektrokotle:
+    name: "WR50055 bit2: Blokování elektrokotle"
+
+  # bit 3 (hodnota 8) — Povolení řízení topnic elektrokotle, coil 50027 + 50028
+  pzpe_ib_wr50055_bit3_topnice_elektrokotle:
+    name: "WR50055 bit3: Řízení topnic elektrokotle"
+
+# =============================================================================
+# Input select (výběr ze tří a více možností)
+# =============================================================================
+
+input_select:
+
+  # WR50114 — Nastavení sezóny (addr 50114)
+  # 0=Topná sezóna, 1=Léto
+  pzpe_is_wr50114_sezona:
+    name: "WR50114: Sezóna"
+    options:
+      - "Topná sezóna"
+      - "Léto"
+    initial: "Topná sezóna"
+
+  # WR50115 — Nastavení provozního režimu (addr 50115)
+  # 0=Sleep, 1=Demo, 2=Auto, 3=Test, 4=Service
+  pzpe_is_wr50115_provozni_rezim:
+    name: "WR50115: Provozní režim"
+    options:
+      - "Sleep"
+      - "Demo"
+      - "Auto"
+      - "Test"
+      - "Service"
+    initial: "Auto"
+
+  # WR50116 — Režim odtávání reverzací výparníku 1 (addr 50116)
+  # 0=Automaticky, 1=Zapnout, 2=Vypnout
+  pzpe_is_wr50116_odtavani_reverzaci:
+    name: "WR50116: Režim odtávání reverzací"
+    options:
+      - "Automaticky"
+      - "Zapnout"
+      - "Vypnout"
+    initial: "Automaticky"
+
 # =============================================================================
 # Friendly names — české názvy entit (entity_id zůstává beze změny)
 # =============================================================================
@@ -172,6 +257,24 @@ homeassistant:
       friendly_name: "PZPE WR50005"
     sensor.pzpe_hreg_rw_wr50015:
       friendly_name: "PZPE WR50015"
+    sensor.pzpe_hreg_rw_wr50050:
+      friendly_name: "PZPE WR50050"
+    sensor.pzpe_hreg_rw_wr50055:
+      friendly_name: "PZPE WR50055"
+    sensor.pzpe_hreg_rw_wr50113_stupne_elektrokotle:
+      friendly_name: "PZPE WR50113 Počet stupňů elektrokotle"
+    sensor.pzpe_hreg_rw_wr50114_sezona:
+      friendly_name: "PZPE WR50114 Sezóna (0=Topná, 1=Léto)"
+    input_select.pzpe_is_wr50114_sezona:
+      friendly_name: "PZPE WR50114 Sezóna"
+    sensor.pzpe_hreg_rw_wr50115_provozni_rezim:
+      friendly_name: "PZPE WR50115 Provozní režim (0=Sleep..4=Service)"
+    input_select.pzpe_is_wr50115_provozni_rezim:
+      friendly_name: "PZPE WR50115 Provozní režim"
+    sensor.pzpe_hreg_rw_wr50116_odtavani_reverzaci:
+      friendly_name: "PZPE WR50116 Režim odtávání reverzací (0=Auto, 1=Zap, 2=Vyp)"
+    input_select.pzpe_is_wr50116_odtavani_reverzaci:
+      friendly_name: "PZPE WR50116 Režim odtávání reverzací"
     sensor.pzpe_hreg_rw_wr50100_regbod_topeni:
       friendly_name: "PZPE WR50100 Regulační bod topení"
     sensor.pzpe_hreg_rw_wr50108_regbod_tv:
@@ -181,6 +284,30 @@ homeassistant:
       friendly_name: "PZPE WR50005 dekadická hodnota"
     sensor.pzpe_tpl_wr50015_hodnota:
       friendly_name: "PZPE WR50015 dekadická hodnota"
+    sensor.pzpe_tpl_wr50050_hodnota:
+      friendly_name: "PZPE WR50050 dekadická hodnota"
+    sensor.pzpe_tpl_wr50055_hodnota:
+      friendly_name: "PZPE WR50055 dekadická hodnota"
+    # --- Input booleans WR50050 ---
+    input_boolean.pzpe_ib_wr50050_bit0_rizeni_kompresoru:
+      friendly_name: "PZPE WR50050 bit0: Řízení kompresoru"
+    input_boolean.pzpe_ib_wr50050_bit1_blokovani_kompresoru:
+      friendly_name: "PZPE WR50050 bit1: Blokování kompresoru"
+    input_boolean.pzpe_ib_wr50050_bit2_anticyklicka_ochrana:
+      friendly_name: "PZPE WR50050 bit2: Vypnutí anticyklické ochrany"
+    input_boolean.pzpe_ib_wr50050_bit8_utlum_ventilatoru:
+      friendly_name: "PZPE WR50050 bit8: Útlum ventilátoru"
+    input_boolean.pzpe_ib_wr50050_bit9_odtavani_reverzaci:
+      friendly_name: "PZPE WR50050 bit9: Odtávání reverzací"
+    # --- Input booleans WR50055 ---
+    input_boolean.pzpe_ib_wr50055_bit0_rizeni_elektrokotle:
+      friendly_name: "PZPE WR50055 bit0: Řízení elektrokotle"
+    input_boolean.pzpe_ib_wr50055_bit1_stupne_elektrokotle:
+      friendly_name: "PZPE WR50055 bit1: Počet stupňů elektrokotle"
+    input_boolean.pzpe_ib_wr50055_bit2_blokovani_elektrokotle:
+      friendly_name: "PZPE WR50055 bit2: Blokování elektrokotle"
+    input_boolean.pzpe_ib_wr50055_bit3_topnice_elektrokotle:
+      friendly_name: "PZPE WR50055 bit3: Řízení topnic elektrokotle"
     # --- Binary sensors ---
     binary_sensor.pzpe_coil_ro_nadrazene_rizeni_aktivni:
       friendly_name: "PZPE Nadřazené řízení TČ je aktivní"
@@ -196,13 +323,43 @@ homeassistant:
       friendly_name: "PZPE Přímotopný dohřev TV"
     binary_sensor.pzpe_coil_ro_dohrev_neprimotopny:
       friendly_name: "PZPE Nepřímotopný dohřev TV"
+    binary_sensor.pzpe_coil_rw_wc50023_rizeni_kompresoru:
+      friendly_name: "PZPE WC50023 Řízení kompresoru aktivní"
+    binary_sensor.pzpe_coil_rw_wc50024_blokovani_kompresoru:
+      friendly_name: "PZPE WC50024 Blokování kompresoru aktivní"
+    binary_sensor.pzpe_coil_rw_wc50025_utlum_ventilatoru:
+      friendly_name: "PZPE WC50025 Útlum ventilátoru aktivní"
+    binary_sensor.pzpe_coil_rw_wc50032_anticyklicka_ochrana:
+      friendly_name: "PZPE WC50032 Anticyklická ochrana vypnuta"
+    binary_sensor.pzpe_coil_rw_wc50026_provoz_elektrokotle:
+      friendly_name: "PZPE WC50026 Provoz elektrokotle aktivní"
+    binary_sensor.pzpe_coil_rw_wc50027_topne_teleso1:
+      friendly_name: "PZPE WC50027 Topné těleso 1 aktivní"
+    binary_sensor.pzpe_coil_rw_wc50028_topne_teleso2:
+      friendly_name: "PZPE WC50028 Topné těleso 2 aktivní"
+    binary_sensor.pzpe_coil_rw_wc50029_blokovani_elektrokotle:
+      friendly_name: "PZPE WC50029 Blokování elektrokotle aktivní"
     # --- Switches ---
-    switch.pzpe_coil_rw_wc50001_ohlaseni_sw:
-      friendly_name: "PZPE Ohlášení nadřazeného řízení"
     switch.pzpe_coil_rw_povolit_ohrev_tv_sw:
       friendly_name: "PZPE Povolit přípravy TV"
     switch.pzpe_coil_rw_pohotovostni_rezim_sw:
       friendly_name: "PZPE Pohotovostní režim"
+    switch.pzpe_coil_rw_wc50023_rizeni_kompresoru_sw:
+      friendly_name: "PZPE WC50023 Řízení kompresoru"
+    switch.pzpe_coil_rw_wc50024_blokovani_kompresoru_sw:
+      friendly_name: "PZPE WC50024 Blokování kompresoru"
+    switch.pzpe_coil_rw_wc50025_utlum_ventilatoru_sw:
+      friendly_name: "PZPE WC50025 Útlum ventilátoru"
+    switch.pzpe_coil_rw_wc50032_anticyklicka_ochrana_sw:
+      friendly_name: "PZPE WC50032 Anticyklická ochrana"
+    switch.pzpe_coil_rw_wc50026_provoz_elektrokotle_sw:
+      friendly_name: "PZPE WC50026 Provoz elektrokotle"
+    switch.pzpe_coil_rw_wc50027_topne_teleso1_sw:
+      friendly_name: "PZPE WC50027 Topné těleso 1"
+    switch.pzpe_coil_rw_wc50028_topne_teleso2_sw:
+      friendly_name: "PZPE WC50028 Topné těleso 2"
+    switch.pzpe_coil_rw_wc50029_blokovani_elektrokotle_sw:
+      friendly_name: "PZPE WC50029 Blokování elektrokotle"
     # --- Climates ---
     climate.pzpe_climate_rw_regbod_tv:
       friendly_name: "PZPE Regulační bod teplé vody"
