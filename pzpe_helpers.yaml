@@ -117,6 +117,28 @@ input_boolean:
     name: "WR50055 bit3: Řízení topnic elektrokotle"
 
 # =============================================================================
+# Input number (číselné nastavení)
+# =============================================================================
+
+input_number:
+
+  # WR50101 — Hystereze regulačního bodu topení (addr 50101, /10)
+  pzpe_in_wr50101_hystereze_topeni:
+    name: "WR50101: Hystereze reg. bodu topení"
+    min: 0.1
+    max: 20.0
+    step: 0.1
+    unit_of_measurement: '°C'
+
+  # WR50109 — Hystereze regulačního bodu teplé vody (addr 50109, /10)
+  pzpe_in_wr50109_hystereze_tv:
+    name: "WR50109: Hystereze reg. bodu TV"
+    min: 0.1
+    max: 20.0
+    step: 0.1
+    unit_of_measurement: '°C'
+
+# =============================================================================
 # Input select (výběr ze tří a více možností)
 # =============================================================================
 
@@ -257,6 +279,14 @@ homeassistant:
       friendly_name: "PZPE WR50005"
     sensor.pzpe_hreg_rw_wr50015:
       friendly_name: "PZPE WR50015"
+    sensor.pzpe_hreg_rw_wr50101_hystereze_topeni:
+      friendly_name: "PZPE WR50101 Hystereze reg. bodu topení"
+    input_number.pzpe_in_wr50101_hystereze_topeni:
+      friendly_name: "PZPE WR50101 Hystereze reg. bodu topení"
+    sensor.pzpe_hreg_rw_wr50109_hystereze_tv:
+      friendly_name: "PZPE WR50109 Hystereze reg. bodu TV"
+    input_number.pzpe_in_wr50109_hystereze_tv:
+      friendly_name: "PZPE WR50109 Hystereze reg. bodu TV"
     sensor.pzpe_hreg_rw_wr50050:
       friendly_name: "PZPE WR50050"
     sensor.pzpe_hreg_rw_wr50055:
@@ -323,6 +353,10 @@ homeassistant:
       friendly_name: "PZPE Přímotopný dohřev TV"
     binary_sensor.pzpe_coil_ro_dohrev_neprimotopny:
       friendly_name: "PZPE Nepřímotopný dohřev TV"
+    binary_sensor.pzpe_coil_rw_wc50010_blokovani_ohrevu_tv:
+      friendly_name: "PZPE WC50010 Blokování ohřevu TV aktivní"
+    binary_sensor.pzpe_coil_rw_wc50011_blokovani_dohrevu_tv:
+      friendly_name: "PZPE WC50011 Blokování elektrického dohřevu TV aktivní"
     binary_sensor.pzpe_coil_rw_wc50023_rizeni_kompresoru:
       friendly_name: "PZPE WC50023 Řízení kompresoru aktivní"
     binary_sensor.pzpe_coil_rw_wc50024_blokovani_kompresoru:
@@ -344,6 +378,10 @@ homeassistant:
       friendly_name: "PZPE Povolit přípravy TV"
     switch.pzpe_coil_rw_pohotovostni_rezim_sw:
       friendly_name: "PZPE Pohotovostní režim"
+    switch.pzpe_coil_rw_wc50010_blokovani_ohrevu_tv_sw:
+      friendly_name: "PZPE WC50010 Blokování ohřevu TV"
+    switch.pzpe_coil_rw_wc50011_blokovani_dohrevu_tv_sw:
+      friendly_name: "PZPE WC50011 Blokování elektrického dohřevu TV"
     switch.pzpe_coil_rw_wc50023_rizeni_kompresoru_sw:
       friendly_name: "PZPE WC50023 Řízení kompresoru"
     switch.pzpe_coil_rw_wc50024_blokovani_kompresoru_sw:

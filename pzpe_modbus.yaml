@@ -511,6 +511,26 @@ sensors:
     input_type: "holding"
     data_type: "uint16"
 
+  # WR50101.VAL — Hystereze regulačního bodu topení (holding register 50101, FC03, /10)
+  - name: pzpe_hreg_rw_wr50101_hystereze_topeni
+    unique_id: pzpe_hreg_rw_wr50101_hystereze_topeni
+    slave: 1
+    address: 50101
+    input_type: "holding"
+    scale: 0.1
+    device_class: temperature
+    unit_of_measurement: '°C'
+
+  # WR50109.VAL — Hystereze regulačního bodu teplé vody (holding register 50109, FC03, /10)
+  - name: pzpe_hreg_rw_wr50109_hystereze_tv
+    unique_id: pzpe_hreg_rw_wr50109_hystereze_tv
+    slave: 1
+    address: 50109
+    input_type: "holding"
+    scale: 0.1
+    device_class: temperature
+    unit_of_measurement: '°C'
+
   # WR50050.VAL — Povolení funkcí kompresoru a ventilátoru (holding register 50050, FC03)
   - name: pzpe_hreg_rw_wr50050
     unique_id: pzpe_hreg_rw_wr50050
@@ -646,6 +666,22 @@ binary_sensors:
     slave: 1
     input_type: coil
 
+  # WC50010 — Blokování ohřevu teplé vody (coil 50010, RW)
+  - name: pzpe_coil_rw_wc50010_blokovani_ohrevu_tv
+    unique_id: pzpe_coil_rw_wc50010_blokovani_ohrevu_tv
+
+    address: 50010
+    slave: 1
+    input_type: coil
+
+  # WC50011 — Blokování elektrického dohřevu teplé vody (coil 50011, RW)
+  - name: pzpe_coil_rw_wc50011_blokovani_dohrevu_tv
+    unique_id: pzpe_coil_rw_wc50011_blokovani_dohrevu_tv
+
+    address: 50011
+    slave: 1
+    input_type: coil
+
   # WC50023 — Řízení kompresoru aktivní (coil 50023, RW)
   - name: pzpe_coil_rw_wc50023_rizeni_kompresoru
     unique_id: pzpe_coil_rw_wc50023_rizeni_kompresoru
@@ -729,6 +765,24 @@ switches:
     unique_id: pzpe_coil_rw_pohotovostni_rezim_sw
 
     address: 2023
+    slave: 1
+    write_type: coil
+    verify:
+
+  # WC50010 — Blokování ohřevu teplé vody (coil 50010, RW)
+  - name: pzpe_coil_rw_wc50010_blokovani_ohrevu_tv_sw
+    unique_id: pzpe_coil_rw_wc50010_blokovani_ohrevu_tv_sw
+
+    address: 50010
+    slave: 1
+    write_type: coil
+    verify:
+
+  # WC50011 — Blokování elektrického dohřevu teplé vody (coil 50011, RW)
+  - name: pzpe_coil_rw_wc50011_blokovani_dohrevu_tv_sw
+    unique_id: pzpe_coil_rw_wc50011_blokovani_dohrevu_tv_sw
+
+    address: 50011
     slave: 1
     write_type: coil
     verify:

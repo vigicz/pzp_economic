@@ -163,6 +163,94 @@
   mode: single
 
 # -----------------------------------------------------------------------------
+# WR50101 — Hystereze regulačního bodu topení (/10 při čtení, *10 při zápisu)
+# -----------------------------------------------------------------------------
+
+- id: pzpe_wr50101_zapis
+  alias: PZPE, zápis do registru WR50101
+  description: Při změně input_number zapíše hodnotu *10 do TČ (stupně → Modbus)
+  triggers:
+  - platform: state
+    entity_id: input_number.pzpe_in_wr50101_hystereze_topeni
+  conditions:
+  - condition: template
+    value_template: >
+      {{ (states('input_number.pzpe_in_wr50101_hystereze_topeni')|float * 10)|int
+         != states('sensor.pzpe_hreg_rw_wr50101_hystereze_topeni')|float * 10|int }}
+  actions:
+  - service: modbus.write_register
+    data:
+      hub: pzpe
+      address: 50101
+      slave: 1
+      value: "{{ (states('input_number.pzpe_in_wr50101_hystereze_topeni')|float * 10)|int }}"
+  mode: single
+
+- id: pzpe_wr50101_sync
+  alias: PZPE, sync WR50101 z TČ do input_number
+  description: Při změně sensoru WR50101 nastaví input_number (Modbus /10 → stupně)
+  triggers:
+  - platform: state
+    entity_id: sensor.pzpe_hreg_rw_wr50101_hystereze_topeni
+  - platform: homeassistant
+    event: start
+  conditions:
+  - condition: template
+    value_template: >
+      {{ states('sensor.pzpe_hreg_rw_wr50101_hystereze_topeni') not in ['unknown', 'unavailable'] }}
+  actions:
+  - service: input_number.set_value
+    target:
+      entity_id: input_number.pzpe_in_wr50101_hystereze_topeni
+    data:
+      value: "{{ states('sensor.pzpe_hreg_rw_wr50101_hystereze_topeni')|float }}"
+  mode: single
+
+# -----------------------------------------------------------------------------
+# WR50109 — Hystereze regulačního bodu teplé vody (/10 při čtení, *10 při zápisu)
+# -----------------------------------------------------------------------------
+
+- id: pzpe_wr50109_zapis
+  alias: PZPE, zápis do registru WR50109
+  description: Při změně input_number zapíše hodnotu *10 do TČ (stupně → Modbus)
+  triggers:
+  - platform: state
+    entity_id: input_number.pzpe_in_wr50109_hystereze_tv
+  conditions:
+  - condition: template
+    value_template: >
+      {{ (states('input_number.pzpe_in_wr50109_hystereze_tv')|float * 10)|int
+         != states('sensor.pzpe_hreg_rw_wr50109_hystereze_tv')|float * 10|int }}
+  actions:
+  - service: modbus.write_register
+    data:
+      hub: pzpe
+      address: 50109
+      slave: 1
+      value: "{{ (states('input_number.pzpe_in_wr50109_hystereze_tv')|float * 10)|int }}"
+  mode: single
+
+- id: pzpe_wr50109_sync
+  alias: PZPE, sync WR50109 z TČ do input_number
+  description: Při změně sensoru WR50109 nastaví input_number (Modbus /10 → stupně)
+  triggers:
+  - platform: state
+    entity_id: sensor.pzpe_hreg_rw_wr50109_hystereze_tv
+  - platform: homeassistant
+    event: start
+  conditions:
+  - condition: template
+    value_template: >
+      {{ states('sensor.pzpe_hreg_rw_wr50109_hystereze_tv') not in ['unknown', 'unavailable'] }}
+  actions:
+  - service: input_number.set_value
+    target:
+      entity_id: input_number.pzpe_in_wr50109_hystereze_tv
+    data:
+      value: "{{ states('sensor.pzpe_hreg_rw_wr50109_hystereze_tv')|float }}"
+  mode: single
+
+# -----------------------------------------------------------------------------
 # WR50050 — obousměrná synchronizace bitového registru (kompresor a ventilátor)
 # -----------------------------------------------------------------------------
 
