@@ -9,7 +9,8 @@ port: 502
 name: pzpe
 delay: 0
 timeout: 5
-scan_interval: 10
+message_wait_milliseconds: 100
+scan_interval: 30
 
 # ---------------------------------------------------------------------------
 # SENSORS (modbus sensor)
