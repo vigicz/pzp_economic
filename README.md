@@ -21,6 +21,15 @@ Zapnutím příslušného input_boolean (např. `pzpe_ib_wr50005_bit2_regbod_top
 
 Aby došlo k přebrání kontroly nad TČ, je potřeba nechat běžet automatizaci „PZPE, ohlášení nadřazeného řízení", která dává TČ každou minutu vědět, že Home Assistant kontrolu přebírá. Pokud TČ tuto informaci pravidelně nedostává, přebere po nějaké době řízení opět na sebe. Stav lze sledovat přes entitu `binary_sensor.pzpe_coil_ro_nadrazene_rizeni_aktivni`.
 
+### Přepínače bitů a synchronizace s TČ
+
+Bitové registry (WR50005, WR50015, WR50050, WR50055) mají v HA jeden input_boolean na každý bit. Synchronizace běží oběma směry a zdrojem pravdy je TČ:
+
+1. Přepnete input_boolean → automatizace „PZPE, zápis do registru …“ po 1 s složí hodnotu celého registru ze všech jeho input_boolean a zapíše ji do TČ.
+2. Při dalším čtení Modbusu se registr načte zpět z TČ a automatizace „PZPE, sync … z TČ do input_boolean“ podle něj nastaví všechny input_boolean. Pokud TČ změnu nepřijme, přepínač se vrátí do skutečného stavu; změna provedená přímo na TČ se tak objeví i v HA.
+
+Do dalšího čtení (desítky sekund) tedy přepínač ukazuje požadovaný, ještě nepotvrzený stav. Bity, které nemají input_boolean, se při zápisu zapisují jako 0.
+
 ## Instalace
 
 ### 1. Nastavte IP adresu
@@ -43,11 +52,9 @@ homeassistant:
   packages:
     pzpe_helpers: !include pzpe_helpers.yaml
 
-template:
-  - !include pzpe_templates.yaml
 ```
 
-Pokud už některé z těchto sekcí (`modbus:`, `template:`, `homeassistant:`) v konfiguraci máte, přidejte příslušné řádky k existujícím položkám.
+Pokud už některé z těchto sekcí (`modbus:`, `homeassistant:`) v konfiguraci máte, přidejte příslušné řádky k existujícím položkám.
 
 ### 3. Restartujte Home Assistant
 
@@ -70,9 +77,8 @@ V provozu je potřeba nechat **všechny automatizace** s prefixem PZPE:
 | Soubor | Obsah |
 |--------|-------|
 | `pzpe_modbus.yaml` | Modbus TCP hub + sensory, binary sensory, switche, climaty |
-| `pzpe_automations.yaml` | Synchronizace registrů WR50005/WR50015 + watchdog nadřazeného řízení |
-| `pzpe_helpers.yaml` | Input boolean pro bity WR50005 (bit 0–8) a WR50015 (bit 0–3) |
-| `pzpe_templates.yaml` | Template sensory pro přepočet input_boolean → dekadická hodnota registru |
+| `pzpe_automations.yaml` | Synchronizace bitových registrů (WR50005, WR50015, WR50050, WR50055) a dalších zapisovatelných registrů + watchdog nadřazeného řízení |
+| `pzpe_helpers.yaml` | Input boolean pro bity WR50005 (bit 0–8), WR50015 (bit 0–3), WR50050 a WR50055 a další pomocníci |
 
 ## Bonus: senzor stavu TČ
 

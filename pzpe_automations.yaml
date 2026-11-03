@@ -21,8 +21,8 @@
     - input_boolean.pzpe_ib_wr50005_bit6_sezona
     - input_boolean.pzpe_ib_wr50005_bit7_hdo
     - input_boolean.pzpe_ib_wr50005_bit8_provozni_rezim
-  # Hodnota se skládá přímo z input_boolean, ne ze sensor.pzpe_tpl_wr50005_hodnota:
-  # template sensor se v okamžiku spuštění automatizace ještě nemusí přepočítat,
+  # Hodnota se skládá přímo z input_boolean. Dřívější template sensor
+  # (pzpe_tpl_wr…_hodnota) se v okamžiku spuštění automatizace ještě nestihl přepočítat,
   # pak se zápis přeskočí nebo zapíše předchozí hodnotu a sync z TČ ji vrátí
   # zpět do input_boolean – vznikne smyčka zápis ↔ sync v rytmu čtení Modbusu.
   # Krátká pauza + mode: restart sloučí dávku změn (sync nastavuje bity postupně).
@@ -127,8 +127,8 @@
     - input_boolean.pzpe_ib_wr50015_bit1_hystereze_tv
     - input_boolean.pzpe_ib_wr50015_bit2_blokovani_pripravy_tv
     - input_boolean.pzpe_ib_wr50015_bit3_blokovani_dohrevu_tv
-  # Hodnota se skládá přímo z input_boolean, ne ze sensor.pzpe_tpl_wr50015_hodnota:
-  # template sensor se v okamžiku spuštění automatizace ještě nemusí přepočítat,
+  # Hodnota se skládá přímo z input_boolean. Dřívější template sensor
+  # (pzpe_tpl_wr…_hodnota) se v okamžiku spuštění automatizace ještě nestihl přepočítat,
   # pak se zápis přeskočí nebo zapíše předchozí hodnotu a sync z TČ ji vrátí
   # zpět do input_boolean – vznikne smyčka zápis ↔ sync v rytmu čtení Modbusu.
   # Krátká pauza + mode: restart sloučí dávku změn (sync nastavuje bity postupně).
@@ -292,8 +292,8 @@
     - input_boolean.pzpe_ib_wr50050_bit2_anticyklicka_ochrana
     - input_boolean.pzpe_ib_wr50050_bit8_utlum_ventilatoru
     - input_boolean.pzpe_ib_wr50050_bit9_odtavani_reverzaci
-  # Hodnota se skládá přímo z input_boolean, ne ze sensor.pzpe_tpl_wr50050_hodnota:
-  # template sensor se v okamžiku spuštění automatizace ještě nemusí přepočítat,
+  # Hodnota se skládá přímo z input_boolean. Dřívější template sensor
+  # (pzpe_tpl_wr…_hodnota) se v okamžiku spuštění automatizace ještě nestihl přepočítat,
   # pak se zápis přeskočí nebo zapíše předchozí hodnotu a sync z TČ ji vrátí
   # zpět do input_boolean – vznikne smyčka zápis ↔ sync v rytmu čtení Modbusu.
   # Krátká pauza + mode: restart sloučí dávku změn (sync nastavuje bity postupně).
@@ -374,8 +374,8 @@
     - input_boolean.pzpe_ib_wr50055_bit1_stupne_elektrokotle
     - input_boolean.pzpe_ib_wr50055_bit2_blokovani_elektrokotle
     - input_boolean.pzpe_ib_wr50055_bit3_topnice_elektrokotle
-  # Hodnota se skládá přímo z input_boolean, ne ze sensor.pzpe_tpl_wr50055_hodnota:
-  # template sensor se v okamžiku spuštění automatizace ještě nemusí přepočítat,
+  # Hodnota se skládá přímo z input_boolean. Dřívější template sensor
+  # (pzpe_tpl_wr…_hodnota) se v okamžiku spuštění automatizace ještě nestihl přepočítat,
   # pak se zápis přeskočí nebo zapíše předchozí hodnotu a sync z TČ ji vrátí
   # zpět do input_boolean – vznikne smyčka zápis ↔ sync v rytmu čtení Modbusu.
   # Krátká pauza + mode: restart sloučí dávku změn (sync nastavuje bity postupně).

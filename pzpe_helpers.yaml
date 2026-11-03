@@ -309,15 +309,6 @@ homeassistant:
       friendly_name: "PZPE WR50100 Regulační bod topení"
     sensor.pzpe_hreg_rw_wr50108_regbod_tv:
       friendly_name: "PZPE WR50108 Regulační bod TV"
-    # --- Template sensors ---
-    sensor.pzpe_tpl_wr50005_hodnota:
-      friendly_name: "PZPE WR50005 dekadická hodnota"
-    sensor.pzpe_tpl_wr50015_hodnota:
-      friendly_name: "PZPE WR50015 dekadická hodnota"
-    sensor.pzpe_tpl_wr50050_hodnota:
-      friendly_name: "PZPE WR50050 dekadická hodnota"
-    sensor.pzpe_tpl_wr50055_hodnota:
-      friendly_name: "PZPE WR50055 dekadická hodnota"
     # --- Input booleans WR50050 ---
     input_boolean.pzpe_ib_wr50050_bit0_rizeni_kompresoru:
       friendly_name: "PZPE WR50050 bit0: Řízení kompresoru"
