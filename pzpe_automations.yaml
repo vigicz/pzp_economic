@@ -21,19 +21,35 @@
     - input_boolean.pzpe_ib_wr50005_bit6_sezona
     - input_boolean.pzpe_ib_wr50005_bit7_hdo
     - input_boolean.pzpe_ib_wr50005_bit8_provozni_rezim
-  conditions:
-  - condition: template
-    value_template: >
-      {{ states('sensor.pzpe_tpl_wr50005_hodnota')|int(0)
-         != states('sensor.pzpe_hreg_rw_wr50005')|int(0) }}
+  # Hodnota se skládá přímo z input_boolean, ne ze sensor.pzpe_tpl_wr50005_hodnota:
+  # template sensor se v okamžiku spuštění automatizace ještě nemusí přepočítat,
+  # pak se zápis přeskočí nebo zapíše předchozí hodnotu a sync z TČ ji vrátí
+  # zpět do input_boolean – vznikne smyčka zápis ↔ sync v rytmu čtení Modbusu.
+  # Krátká pauza + mode: restart sloučí dávku změn (sync nastavuje bity postupně).
+  # Bez podmínky „liší se od registru“: sensor registru se obnoví až dalším čtením
+  # Modbusu, takže by rychlé přepnutí tam a zpět přeskočil. Zápis stejné hodnoty
+  # nic nezmění a sync nespustí.
   actions:
-  - service: modbus.write_register
+  - delay:
+      seconds: 1
+  - variables:
+      val: >-
+        {{ (is_state('input_boolean.pzpe_ib_wr50005_bit0_rezim_tc', 'on') | int * 1)
+        + (is_state('input_boolean.pzpe_ib_wr50005_bit1_obecny_pozadavek', 'on') | int * 2)
+        + (is_state('input_boolean.pzpe_ib_wr50005_bit2_regbod_topeni', 'on') | int * 4)
+        + (is_state('input_boolean.pzpe_ib_wr50005_bit3_hystereze_topeni', 'on') | int * 8)
+        + (is_state('input_boolean.pzpe_ib_wr50005_bit4_regbod_chlazeni', 'on') | int * 16)
+        + (is_state('input_boolean.pzpe_ib_wr50005_bit5_hystereze_chlazeni', 'on') | int * 32)
+        + (is_state('input_boolean.pzpe_ib_wr50005_bit6_sezona', 'on') | int * 64)
+        + (is_state('input_boolean.pzpe_ib_wr50005_bit7_hdo', 'on') | int * 128)
+        + (is_state('input_boolean.pzpe_ib_wr50005_bit8_provozni_rezim', 'on') | int * 256) }}
+  - action: modbus.write_register
     data:
       hub: pzpe
       address: 50005
       slave: 1
-      value: '{{ states(''sensor.pzpe_tpl_wr50005_hodnota'')|int }}'
-  mode: single
+      value: "{{ val | int }}"
+  mode: restart
 
 - id: pzpe_wr50005_sync
   alias: PZPE, sync WR50005 z TČ do input_boolean
@@ -95,7 +111,7 @@
       {{ 'input_boolean.turn_on' if (val | int | bitwise_and(256)) > 0 else 'input_boolean.turn_off' }}
     target:
       entity_id: input_boolean.pzpe_ib_wr50005_bit8_provozni_rezim
-  mode: single
+  mode: restart
 
 # -----------------------------------------------------------------------------
 # WR50015 — obousměrná synchronizace bitového registru (teplá voda)
@@ -111,19 +127,30 @@
     - input_boolean.pzpe_ib_wr50015_bit1_hystereze_tv
     - input_boolean.pzpe_ib_wr50015_bit2_blokovani_pripravy_tv
     - input_boolean.pzpe_ib_wr50015_bit3_blokovani_dohrevu_tv
-  conditions:
-  - condition: template
-    value_template: >
-      {{ states('sensor.pzpe_tpl_wr50015_hodnota')|int(0)
-         != states('sensor.pzpe_hreg_rw_wr50015')|int(0) }}
+  # Hodnota se skládá přímo z input_boolean, ne ze sensor.pzpe_tpl_wr50015_hodnota:
+  # template sensor se v okamžiku spuštění automatizace ještě nemusí přepočítat,
+  # pak se zápis přeskočí nebo zapíše předchozí hodnotu a sync z TČ ji vrátí
+  # zpět do input_boolean – vznikne smyčka zápis ↔ sync v rytmu čtení Modbusu.
+  # Krátká pauza + mode: restart sloučí dávku změn (sync nastavuje bity postupně).
+  # Bez podmínky „liší se od registru“: sensor registru se obnoví až dalším čtením
+  # Modbusu, takže by rychlé přepnutí tam a zpět přeskočil. Zápis stejné hodnoty
+  # nic nezmění a sync nespustí.
   actions:
-  - service: modbus.write_register
+  - delay:
+      seconds: 1
+  - variables:
+      val: >-
+        {{ (is_state('input_boolean.pzpe_ib_wr50015_bit0_regbod_tv', 'on') | int * 1)
+        + (is_state('input_boolean.pzpe_ib_wr50015_bit1_hystereze_tv', 'on') | int * 2)
+        + (is_state('input_boolean.pzpe_ib_wr50015_bit2_blokovani_pripravy_tv', 'on') | int * 4)
+        + (is_state('input_boolean.pzpe_ib_wr50015_bit3_blokovani_dohrevu_tv', 'on') | int * 8) }}
+  - action: modbus.write_register
     data:
       hub: pzpe
       address: 50015
       slave: 1
-      value: '{{ states(''sensor.pzpe_tpl_wr50015_hodnota'')|int }}'
-  mode: single
+      value: "{{ val | int }}"
+  mode: restart
 
 - id: pzpe_wr50015_sync
   alias: PZPE, sync WR50015 z TČ do input_boolean
@@ -160,7 +187,7 @@
       {{ 'input_boolean.turn_on' if (val | int | bitwise_and(8)) > 0 else 'input_boolean.turn_off' }}
     target:
       entity_id: input_boolean.pzpe_ib_wr50015_bit3_blokovani_dohrevu_tv
-  mode: single
+  mode: restart
 
 # -----------------------------------------------------------------------------
 # WR50101 — Hystereze regulačního bodu topení (/10 při čtení, *10 při zápisu)
@@ -265,19 +292,31 @@
     - input_boolean.pzpe_ib_wr50050_bit2_anticyklicka_ochrana
     - input_boolean.pzpe_ib_wr50050_bit8_utlum_ventilatoru
     - input_boolean.pzpe_ib_wr50050_bit9_odtavani_reverzaci
-  conditions:
-  - condition: template
-    value_template: >
-      {{ states('sensor.pzpe_tpl_wr50050_hodnota')|int(0)
-         != states('sensor.pzpe_hreg_rw_wr50050')|int(0) }}
+  # Hodnota se skládá přímo z input_boolean, ne ze sensor.pzpe_tpl_wr50050_hodnota:
+  # template sensor se v okamžiku spuštění automatizace ještě nemusí přepočítat,
+  # pak se zápis přeskočí nebo zapíše předchozí hodnotu a sync z TČ ji vrátí
+  # zpět do input_boolean – vznikne smyčka zápis ↔ sync v rytmu čtení Modbusu.
+  # Krátká pauza + mode: restart sloučí dávku změn (sync nastavuje bity postupně).
+  # Bez podmínky „liší se od registru“: sensor registru se obnoví až dalším čtením
+  # Modbusu, takže by rychlé přepnutí tam a zpět přeskočil. Zápis stejné hodnoty
+  # nic nezmění a sync nespustí.
   actions:
-  - service: modbus.write_register
+  - delay:
+      seconds: 1
+  - variables:
+      val: >-
+        {{ (is_state('input_boolean.pzpe_ib_wr50050_bit0_rizeni_kompresoru', 'on') | int * 1)
+        + (is_state('input_boolean.pzpe_ib_wr50050_bit1_blokovani_kompresoru', 'on') | int * 2)
+        + (is_state('input_boolean.pzpe_ib_wr50050_bit2_anticyklicka_ochrana', 'on') | int * 4)
+        + (is_state('input_boolean.pzpe_ib_wr50050_bit8_utlum_ventilatoru', 'on') | int * 256)
+        + (is_state('input_boolean.pzpe_ib_wr50050_bit9_odtavani_reverzaci', 'on') | int * 512) }}
+  - action: modbus.write_register
     data:
       hub: pzpe
       address: 50050
       slave: 1
-      value: '{{ states(''sensor.pzpe_tpl_wr50050_hodnota'')|int }}'
-  mode: single
+      value: "{{ val | int }}"
+  mode: restart
 
 - id: pzpe_wr50050_sync
   alias: PZPE, sync WR50050 z TČ do input_boolean
@@ -319,7 +358,7 @@
       {{ 'input_boolean.turn_on' if (val | int | bitwise_and(512)) > 0 else 'input_boolean.turn_off' }}
     target:
       entity_id: input_boolean.pzpe_ib_wr50050_bit9_odtavani_reverzaci
-  mode: single
+  mode: restart
 
 # -----------------------------------------------------------------------------
 # WR50055 — obousměrná synchronizace bitového registru (elektrokotel)
@@ -335,19 +374,30 @@
     - input_boolean.pzpe_ib_wr50055_bit1_stupne_elektrokotle
     - input_boolean.pzpe_ib_wr50055_bit2_blokovani_elektrokotle
     - input_boolean.pzpe_ib_wr50055_bit3_topnice_elektrokotle
-  conditions:
-  - condition: template
-    value_template: >
-      {{ states('sensor.pzpe_tpl_wr50055_hodnota')|int(0)
-         != states('sensor.pzpe_hreg_rw_wr50055')|int(0) }}
+  # Hodnota se skládá přímo z input_boolean, ne ze sensor.pzpe_tpl_wr50055_hodnota:
+  # template sensor se v okamžiku spuštění automatizace ještě nemusí přepočítat,
+  # pak se zápis přeskočí nebo zapíše předchozí hodnotu a sync z TČ ji vrátí
+  # zpět do input_boolean – vznikne smyčka zápis ↔ sync v rytmu čtení Modbusu.
+  # Krátká pauza + mode: restart sloučí dávku změn (sync nastavuje bity postupně).
+  # Bez podmínky „liší se od registru“: sensor registru se obnoví až dalším čtením
+  # Modbusu, takže by rychlé přepnutí tam a zpět přeskočil. Zápis stejné hodnoty
+  # nic nezmění a sync nespustí.
   actions:
-  - service: modbus.write_register
+  - delay:
+      seconds: 1
+  - variables:
+      val: >-
+        {{ (is_state('input_boolean.pzpe_ib_wr50055_bit0_rizeni_elektrokotle', 'on') | int * 1)
+        + (is_state('input_boolean.pzpe_ib_wr50055_bit1_stupne_elektrokotle', 'on') | int * 2)
+        + (is_state('input_boolean.pzpe_ib_wr50055_bit2_blokovani_elektrokotle', 'on') | int * 4)
+        + (is_state('input_boolean.pzpe_ib_wr50055_bit3_topnice_elektrokotle', 'on') | int * 8) }}
+  - action: modbus.write_register
     data:
       hub: pzpe
       address: 50055
       slave: 1
-      value: '{{ states(''sensor.pzpe_tpl_wr50055_hodnota'')|int }}'
-  mode: single
+      value: "{{ val | int }}"
+  mode: restart
 
 - id: pzpe_wr50055_sync
   alias: PZPE, sync WR50055 z TČ do input_boolean
@@ -384,7 +434,7 @@
       {{ 'input_boolean.turn_on' if (val | int | bitwise_and(8)) > 0 else 'input_boolean.turn_off' }}
     target:
       entity_id: input_boolean.pzpe_ib_wr50055_bit3_topnice_elektrokotle
-  mode: single
+  mode: restart
 
 # -----------------------------------------------------------------------------
 # WR50114 — Nastavení sezóny (0=Topná sezóna, 1=Léto)
